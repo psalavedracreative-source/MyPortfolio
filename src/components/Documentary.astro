@@ -10,7 +10,7 @@ const SECONDS = 5;
     {chapters.map((c, i) => (
       <div class="slide" data-slide={i} aria-hidden={i === 0 ? 'false' : 'true'} data-on={i === 0 ? '' : undefined}>
         {c.img
-          ? <Picture src={c.img} alt={c.alt} widths={[640, 1024, 1600, 2000]} sizes="(max-width: 1240px) 100vw, 1200px" formats={['avif', 'webp']} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          ? <Picture src={c.img} alt={c.alt} widths={[640, 1024, 1600, 2000]} sizes="(max-width: 1240px) 100vw, 1200px" formats={['avif', 'webp']} fallbackFormat="jpg" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
           : <div class="slot doc-slot"><Icon name="image" />{c.photo}</div>}
       </div>
     ))}

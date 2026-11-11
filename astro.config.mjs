@@ -9,7 +9,7 @@ export default defineConfig({
   site,
   output: 'static',
   devToolbar: { enabled: false },
-  trailingSlash: 'never',
+  trailingSlash: 'ignore',
   build: { format: 'file' },
   integrations: [sitemap()],
   image: {

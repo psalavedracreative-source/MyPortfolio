@@ -1,0 +1,208 @@
+# Decap CMS: edit the site's JSON content and upload media at /admin.
+# One-time setup on Netlify is described in README.md ("Editing content without code").
+backend:
+  name: git-gateway
+  branch: main # the branch Netlify deploys from
+
+# Uploads land in /assets; saved paths look like "assets/...", the same format the JSON already uses.
+media_folder: "assets/uploads"
+public_folder: "assets/uploads"
+
+site_url: /
+display_url: /
+logo_url: /favicon.svg
+
+collections:
+  # ---------------------------------------------------------------- WORK
+  - name: work
+    label: Work
+    files:
+      - name: work
+        label: Work library & home cover flow
+        file: content/work.json
+        format: json
+        fields:
+          - { name: _how_to_add, label: Note, widget: hidden }
+          - name: items
+            label: Work samples (Work page)
+            label_singular: Work sample
+            widget: list
+            summary: "{{fields.type}} · {{fields.title}}"
+            fields:
+              - { name: id, label: "ID (unique, no spaces)", widget: string }
+              - { name: type, label: Type, widget: select, options: [Reels, Carousels, Ads, Websites] }
+              - { name: title, label: Title, widget: string }
+              - { name: client, label: Client, widget: string }
+              - { name: stat, label: "Stat (shown in lime)", widget: string }
+              - { name: video, label: "Video (Reels, or a video ad)", widget: file, required: false, media_folder: "/assets/work/reels", public_folder: "assets/work/reels" }
+              - { name: poster, label: "Video poster image", widget: image, required: false, media_folder: "/assets/work/posters", public_folder: "assets/work/posters" }
+              - name: slides
+                label: "Carousel slides (1080×1350)"
+                widget: list
+                required: false
+                field: { name: slide, label: Slide, widget: image, media_folder: "/assets/work/carousels", public_folder: "assets/work/carousels" }
+              - { name: image, label: "Image (Ads / Websites)", widget: image, required: false, media_folder: "/assets/work/images", public_folder: "assets/work/images" }
+              - { name: featured, label: "Also show in the home-page cover flow", widget: boolean, default: false, required: false }
+          - name: proof_coverflow
+            label: Home-page proof cover flow
+            label_singular: Cover-flow card
+            widget: list
+            summary: "{{fields.stat}} {{fields.unit}} · {{fields.tag}}"
+            fields:
+              - { name: tag, label: Tag, widget: string }
+              - { name: client, label: Client, widget: string }
+              - { name: cover, label: Cover image, widget: image, required: false, media_folder: "/assets/work/covers", public_folder: "assets/work/covers" }
+              - { name: stat, label: "Stat (e.g. 2.4M+)", widget: string }
+              - { name: unit, label: "Unit (e.g. views)", widget: string }
+              - { name: line, label: Punchy line, widget: string }
+
+  # ---------------------------------------------------------------- ABOUT
+  - name: about
+    label: About
+    files:
+      - name: about
+        label: About page
+        file: content/about.json
+        format: json
+        fields:
+          - { name: headline, label: Headline, widget: string }
+          - { name: bio, label: Bio, widget: text }
+          - { name: hero_photo, label: Hero photo, widget: image, media_folder: "/assets/photos", public_folder: "assets/photos" }
+          - name: stats
+            label: Stat tiles
+            widget: list
+            summary: "{{fields.value}} {{fields.label}}"
+            fields:
+              - { name: value, label: Value, widget: string }
+              - { name: label, label: Label, widget: string }
+          - name: documentary
+            label: Documentary chapters
+            label_singular: Chapter
+            widget: list
+            summary: "{{fields.chapter}} · {{fields.title}}"
+            fields:
+              - { name: chapter, label: "Chapter (e.g. Chapter 01)", widget: string }
+              - { name: year, label: Year, widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: caption, label: Subtitle in the player, widget: string }
+              - { name: text, label: Story text, widget: text }
+              - { name: photo, label: Photo, widget: image, media_folder: "/assets/photos", public_folder: "assets/photos" }
+              - { name: alt, label: "Photo description (alt text)", widget: string }
+          - name: certificates
+            label: Certificates
+            label_singular: Certificate
+            widget: list
+            summary: "{{fields.name}} · {{fields.issuer}}"
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: issuer, label: Issuer, widget: string }
+              - { name: year, label: Year, widget: string }
+              - { name: photo, label: Photo, widget: image, required: false, media_folder: "/assets/photos/certificates", public_folder: "assets/photos/certificates" }
+          - name: gallery
+            label: Behind the scenes
+            label_singular: Photo
+            widget: list
+            summary: "{{fields.caption}}"
+            fields:
+              - { name: photo, label: Photo, widget: image, required: false, media_folder: "/assets/photos/gallery", public_folder: "assets/photos/gallery" }
+              - { name: caption, label: Caption, widget: string }
+
+  # ---------------------------------------------------------------- SITE
+  - name: site
+    label: Site settings
+    files:
+      - name: site
+        label: Business info, logos, testimonials
+        file: content/site.json
+        format: json
+        fields:
+          - { name: brand, label: Brand name, widget: string }
+          - { name: owner, label: Owner, widget: string }
+          - { name: role, label: Role, widget: string }
+          - { name: location, label: Location, widget: string }
+          - { name: tagline, label: "Tagline (home headline)", widget: string }
+          - { name: subline, label: Subline, widget: text }
+          - name: cta_primary
+            label: Booking button
+            widget: object
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: url, label: "Booking link (Google Calendar)", widget: string }
+          - name: cta_dm
+            label: DM button
+            widget: object
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: url, label: Link, widget: string }
+          - name: links
+            label: Links
+            widget: object
+            fields:
+              - { name: instagram, label: Instagram, widget: string }
+              - { name: linkedin, label: LinkedIn, widget: string }
+              - { name: email, label: Public email, widget: string }
+          - { name: promises, label: Promises, widget: list, field: { name: promise, label: Promise, widget: string } }
+          - name: terms
+            label: Terms
+            widget: object
+            fields:
+              - { name: reply_time, label: Reply time, widget: string }
+              - { name: payment, label: Payment, widget: string }
+              - { name: revisions, label: Revisions, widget: string }
+              - { name: turnaround, label: Turnaround, widget: string }
+          - name: process
+            label: How it works (steps)
+            widget: list
+            summary: "{{fields.step}}"
+            fields:
+              - { name: step, label: Step, widget: string }
+              - { name: text, label: Text, widget: string }
+          - name: client_logos
+            label: Client logos
+            label_singular: Logo
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { name: name, label: Client name, widget: string }
+              - { name: logo, label: "Logo (SVG or PNG)", widget: image, required: false, media_folder: "/assets/logos", public_folder: "assets/logos" }
+          - name: testimonials
+            label: Testimonials
+            widget: list
+            summary: "{{fields.name}} · {{fields.brand}}"
+            fields:
+              - { name: quote, label: Quote, widget: text }
+              - { name: name, label: Name, widget: string }
+              - { name: brand, label: Brand, widget: string }
+          - { name: form_endpoint, label: "Form endpoint (Formspree / Web3Forms URL)", widget: string }
+
+  # ---------------------------------------------------------------- ASSISTANT
+  - name: assistant
+    label: AI assistant
+    files:
+      - name: faq
+        label: Assistant answers
+        file: content/assistant-faq.json
+        format: json
+        fields:
+          - { name: _note, label: Note, widget: hidden }
+          - { name: assistant_name, label: Assistant name, widget: string }
+          - { name: greeting, label: Greeting, widget: text }
+          - { name: starter_chips, label: Starter quick replies, widget: list, field: { name: chip, label: Chip, widget: string } }
+          - name: fallback
+            label: When it doesn't know
+            widget: object
+            fields:
+              - { name: answer, label: Answer, widget: text }
+              - { name: chips, label: Quick replies, widget: list, field: { name: chip, label: Chip, widget: string } }
+          - name: intents
+            label: Questions & answers
+            label_singular: Question topic
+            widget: list
+            summary: "{{fields.id}}"
+            fields:
+              - { name: id, label: "Topic ID (unique)", widget: string }
+              - { name: examples, label: Example questions, widget: list, field: { name: example, label: Question, widget: string } }
+              - { name: keywords, label: Keywords, widget: list, field: { name: keyword, label: Keyword, widget: string } }
+              - { name: answer, label: Answer, widget: text }
+              - { name: chips, label: Quick replies, widget: list, required: false, field: { name: chip, label: Chip, widget: string } }
+              - { name: action, label: Action, widget: select, required: false, options: [open_booking, go_work, show_lead_form] }
