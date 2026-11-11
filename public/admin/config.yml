@@ -31,6 +31,7 @@ collections:
             fields:
               - { name: id, label: "ID (unique, no spaces)", widget: string }
               - { name: type, label: Type, widget: select, options: [Reels, Carousels, AI Video, Ads, Websites] }
+              - { name: style, label: "Content style (AI Video only)", widget: select, options: [UGC, BGC, EGC, IGC, AGC], required: false, hint: "Which section of the AI video area it appears in." }
               - { name: title, label: Title, widget: string }
               - { name: client, label: Client, widget: string }
               - { name: stat, label: "Stat (shown in lime)", widget: string, required: false }
@@ -57,6 +58,22 @@ collections:
               - { name: stat, label: "Stat (e.g. 2.4M+)", widget: string }
               - { name: unit, label: "Unit (e.g. views)", widget: string }
               - { name: line, label: Punchy line, widget: string }
+          - name: ai_video
+            label: AI video section (Work page)
+            widget: object
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: intro, label: Intro, widget: text }
+              - name: styles
+                label: Content styles (sections, in this order)
+                label_singular: Style
+                widget: list
+                summary: "{{fields.code}} · {{fields.name}}"
+                fields:
+                  - { name: code, label: "Code (e.g. UGC)", widget: string }
+                  - { name: name, label: Full name, widget: string }
+                  - { name: who, label: Who creates it, widget: string }
+                  - { name: example, label: Best example, widget: string }
 
   # ---------------------------------------------------------------- ABOUT
   - name: about

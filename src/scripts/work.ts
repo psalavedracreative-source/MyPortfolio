@@ -12,6 +12,7 @@ export function initWork(root: HTMLElement) {
 function initFilters(root: HTMLElement) {
   const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
   const tiles = [...root.querySelectorAll<HTMLElement>('[data-type]')];
+  const groups = [...root.querySelectorAll<HTMLElement>('[data-group]')];
   const status = root.querySelector<HTMLElement>('[data-filter-status]');
   const valid = new Set(chips.map((c) => c.dataset.filter));
 
@@ -24,6 +25,8 @@ function initFilters(root: HTMLElement) {
       t.hidden = !show;
       if (show) shown++;
     });
+    // hide a section (main grid, AI area, each content style) when none of its tiles match
+    groups.forEach((g) => { g.hidden = !g.querySelector('[data-type]:not([hidden])'); });
     if (status) status.textContent = `Showing ${shown} ${shown === 1 ? 'item' : 'items'}`;
     if (push) {
       const url = new URL(location.href);
@@ -39,20 +42,20 @@ function initFilters(root: HTMLElement) {
 
 // ---------- masonry: tiles of different shapes (9:16, 16:9, 4:5) pack without gaps ----------
 function initMasonry(root: HTMLElement) {
-  const grid = root.querySelector<HTMLElement>('[data-grid]');
-  if (!grid) return;
-  const ROW = 4;
-  const layout = () => {
-    const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
-    grid.querySelectorAll<HTMLElement>('.tile').forEach((t) => {
-      if (t.hidden) return;
-      t.style.gridRowEnd = `span ${Math.ceil((t.getBoundingClientRect().height + gap) / ROW)}`;
-    });
-  };
-  grid.dataset.masonry = '';
-  const ro = new ResizeObserver(() => requestAnimationFrame(layout));
-  grid.querySelectorAll('.tile').forEach((t) => ro.observe(t));
-  layout();
+  root.querySelectorAll<HTMLElement>('[data-grid]').forEach((grid) => {
+    const ROW = 4;
+    const layout = () => {
+      const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+      grid.querySelectorAll<HTMLElement>('.tile').forEach((t) => {
+        if (t.hidden) return;
+        t.style.gridRowEnd = `span ${Math.ceil((t.getBoundingClientRect().height + gap) / ROW)}`;
+      });
+    };
+    grid.dataset.masonry = '';
+    const ro = new ResizeObserver(() => requestAnimationFrame(layout));
+    grid.querySelectorAll('.tile').forEach((t) => ro.observe(t));
+    layout();
+  });
 }
 
 // ---------- reels: play in view, pause out of view, tap toggles sound ----------

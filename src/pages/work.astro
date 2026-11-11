@@ -2,12 +2,22 @@
 import Base from '../layouts/Base.astro';
 import WorkCard from '../components/WorkCard.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { site, workItems, workTypes, slugify } from '../lib/content';
+import { site, workItems, workTypes, aiVideo, slugify } from '../lib/content';
 
 const filters = [
   { label: 'All', value: 'all', count: workItems.length },
   ...workTypes.map((t) => ({ label: t, value: slugify(t), count: workItems.filter((w) => w.type === t).length })),
 ];
+
+// AI clips are shown in their own area, one section per content style (UGC, BGC, …), in the order of ai_video.styles.
+const isAi = (w: (typeof workItems)[number]) => w.type === 'AI Video';
+const mainItems = workItems.filter((w) => !isAi(w));
+const aiGroups = aiVideo.styles
+  .map((s) => ({ ...s, items: workItems.filter((w) => isAi(w) && w.style === s.code) }))
+  .filter((g) => g.items.length);
+const unsorted = workItems.filter((w) => isAi(w) && !aiVideo.styles.some((s) => s.code === w.style));
+if (unsorted.length) aiGroups.push({ code: 'AI', name: 'More AI video', who: '', example: '', items: unsorted });
+let n = 0;
 ---
 <Base
   page="work"
@@ -29,9 +39,37 @@ const filters = [
       ))}
     </div>
     <p class="sr-only" aria-live="polite" data-filter-status></p>
-    <div class="grid" data-grid>
-      {workItems.map((item, i) => <WorkCard item={item} index={i} />)}
+    <div class="grid" data-grid data-group>
+      {mainItems.map((item) => <WorkCard item={item} index={n++} />)}
     </div>
+
+    {aiGroups.length > 0 && (
+      <div class="ai" data-group="ai-video">
+        <header class="ai-head">
+          <h2 class="h2">{aiVideo.title}</h2>
+          <p class="ai-intro">{aiVideo.intro}</p>
+          <nav class="ai-jump" aria-label="Jump to a content style">
+            {aiGroups.map((g) => <a class="chip" href={`#style-${slugify(g.code)}`}>{g.code}<small>{g.items.length}</small></a>)}
+          </nav>
+        </header>
+
+        {aiGroups.map((g) => (
+          <section class="style" id={`style-${slugify(g.code)}`} aria-labelledby={`style-${slugify(g.code)}-title`} data-group>
+            <div class="style-head">
+              <p class="style-code" aria-hidden="true">{g.code}</p>
+              <div>
+                <h3 class="style-name" id={`style-${slugify(g.code)}-title`}>{g.name} <span class="sr-only">({g.code})</span></h3>
+                {g.who && <p class="style-meta"><span>Who creates it</span>{g.who}</p>}
+                {g.example && <p class="style-meta"><span>Best example</span>{g.example}</p>}
+              </div>
+            </div>
+            <div class="grid" data-grid>
+              {g.items.map((item) => <WorkCard item={item} index={n++} />)}
+            </div>
+          </section>
+        ))}
+      </div>
+    )}
   </section>
 
   <CtaBand title="Want results like these?" />
@@ -43,6 +81,26 @@ const filters = [
   .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; margin-top: 32px; align-items: start; }
   .grid[data-masonry] { grid-auto-rows: 4px; row-gap: 0; grid-auto-flow: row dense; }
+  [data-group][hidden] { display: none; }
+
+  .ai { margin-top: clamp(56px, 8vw, 96px); }
+  .ai-head { display: flex; flex-direction: column; gap: 12px; padding-top: clamp(40px, 6vw, 56px); border-top: var(--border); }
+  .ai-intro { color: var(--muted); font-size: 1.0625rem; max-width: 60ch; }
+  .ai-jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .ai-jump .chip { text-decoration: none; }
+
+  .style { margin-top: clamp(40px, 6vw, 64px); scroll-margin-top: 96px; }
+  .style-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(16px, 3vw, 28px); align-items: start; }
+  .style-code { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.03em; line-height: .9; color: var(--accent); }
+  .style-name { font-size: clamp(1.25rem, 2.4vw, 1.625rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+  .style-meta { margin-top: 6px; color: var(--muted); font-size: .9375rem; }
+  .style-meta span { display: inline-block; min-width: 9.5em; margin-right: 8px; color: var(--text-2, var(--text)); font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .style .grid { margin-top: 24px; }
+
+  @media (max-width: 600px) {
+    .style-head { grid-template-columns: 1fr; gap: 8px; }
+    .style-meta span { display: block; min-width: 0; margin: 0 0 2px; }
+  }
 </style>
 
 <script>

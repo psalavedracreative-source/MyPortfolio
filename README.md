@@ -65,7 +65,7 @@ You can edit the JSON files directly (then commit and push), or use the editor a
 ```
 
 - **Carousels:** use `"slides": ["assets/work/carousels/acme/01.png", "..."]` (1080×1350).
-- **AI Video:** same as Reels (`"video"` + `"poster"`). Add `"ratio": "16:9"` for landscape clips (they take two columns on wider screens) and `"sound": false` for a silent clip (hides the sound button). The 11 AI clips live in `assets/work/ai-video/`, grouped by niche in the `client` line (Beauty, Fashion, Food & drink, Automotive, Real estate…).
+- **AI Video:** same as Reels (`"video"` + `"poster"`), plus `"style"`: `UGC`, `BGC`, `EGC`, `IGC` or `AGC`. The Work page shows AI clips in their own area, one section per style (in the order of `ai_video.styles`, which also holds each style's full name, who creates it and an example). Styles with no clips are hidden. Add `"ratio": "16:9"` for landscape clips (they take two columns on wider screens) and `"sound": false` for a silent clip (hides the sound button). The 11 AI clips live in `assets/work/ai-video/`, grouped by niche in the `client` line (Beauty, Fashion, Food & drink, Automotive, Real estate…).
 - **Ads / Websites:** use `"image": "assets/..."` (or `"video"` for a video ad). Leave the media out to show an empty slot.
 - `"stat"` is optional; leave it out when there's no real number to show.
 - The filter chips and their counts update by themselves. Filters are shareable: `/work?type=reels`.

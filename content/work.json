@@ -1,5 +1,5 @@
 {
-  "_how_to_add": "Add one object per sample. type = Reels | Carousels | AI Video | Ads | Websites. Media: Reels and AI Video use \"video\" (+ optional \"poster\"; add \"ratio\": \"16:9\" for landscape clips and \"sound\": false if the clip is silent), Carousels use \"slides\" (a list), Ads/Websites use \"image\" or \"video\"; leave media out to show an empty slot. \"stat\" is optional. Put files in assets/work/... and point to them. featured=true also puts it in the home-page proof cover flow.",
+  "_how_to_add": "Add one object per sample. type = Reels | Carousels | AI Video | Ads | Websites. Media: Reels and AI Video use \"video\"; AI Video also takes \"style\" (UGC | BGC | EGC | IGC | AGC, see ai_video.styles) (+ optional \"poster\"; add \"ratio\": \"16:9\" for landscape clips and \"sound\": false if the clip is silent), Carousels use \"slides\" (a list), Ads/Websites use \"image\" or \"video\"; leave media out to show an empty slot. \"stat\" is optional. Put files in assets/work/... and point to them. featured=true also puts it in the home-page proof cover flow.",
   "items": [
     {
       "id": "reels-no-clients-reel",
@@ -54,17 +54,9 @@
       "featured": false
     },
     {
-      "id": "ai-lumiere-serum",
-      "type": "AI Video",
-      "title": "Lumière serum",
-      "client": "Beauty · AI concept",
-      "video": "assets/work/ai-video/lumiere-serum.mp4",
-      "poster": "assets/work/ai-video/posters/lumiere-serum.jpg",
-      "featured": false
-    },
-    {
       "id": "ai-skintific-toner",
       "type": "AI Video",
+      "style": "UGC",
       "title": "Skintific toner",
       "client": "Beauty · AI concept",
       "video": "assets/work/ai-video/skintific-toner.mp4",
@@ -75,6 +67,7 @@
     {
       "id": "ai-old-spice",
       "type": "AI Video",
+      "style": "UGC",
       "title": "Old Spice deodorant",
       "client": "Personal care · AI concept",
       "video": "assets/work/ai-video/old-spice.mp4",
@@ -82,37 +75,19 @@
       "featured": false
     },
     {
-      "id": "ai-anastasia-lip",
+      "id": "ai-lumiere-serum",
       "type": "AI Video",
-      "title": "Anastasia Beverly Hills lip",
+      "style": "BGC",
+      "title": "Lumière serum",
       "client": "Beauty · AI concept",
-      "video": "assets/work/ai-video/anastasia-lip.mp4",
-      "poster": "assets/work/ai-video/posters/anastasia-lip.jpg",
-      "ratio": "16:9",
-      "featured": false
-    },
-    {
-      "id": "ai-ai-model-lookbook",
-      "type": "AI Video",
-      "title": "AI model lookbook",
-      "client": "Fashion · AI concept",
-      "video": "assets/work/ai-video/ai-model-lookbook.mp4",
-      "poster": "assets/work/ai-video/posters/ai-model-lookbook.jpg",
-      "featured": false
-    },
-    {
-      "id": "ai-skincare-routine",
-      "type": "AI Video",
-      "title": "Clean skincare routine",
-      "client": "Beauty · AI concept",
-      "video": "assets/work/ai-video/skincare-routine.mp4",
-      "poster": "assets/work/ai-video/posters/skincare-routine.jpg",
-      "ratio": "16:9",
+      "video": "assets/work/ai-video/lumiere-serum.mp4",
+      "poster": "assets/work/ai-video/posters/lumiere-serum.jpg",
       "featured": false
     },
     {
       "id": "ai-ube-drink-promo",
       "type": "AI Video",
+      "style": "BGC",
       "title": "Ube drink promo",
       "client": "Food & drink · AI concept",
       "video": "assets/work/ai-video/ube-drink-promo.mp4",
@@ -122,6 +97,7 @@
     {
       "id": "ai-sandwich-commercial",
       "type": "AI Video",
+      "style": "BGC",
       "title": "Sandwich food commercial",
       "client": "Food & drink · AI concept",
       "video": "assets/work/ai-video/sandwich-commercial.mp4",
@@ -133,6 +109,7 @@
     {
       "id": "ai-yamaha-motorcycle",
       "type": "AI Video",
+      "style": "BGC",
       "title": "Yamaha motorcycle",
       "client": "Automotive · AI concept",
       "video": "assets/work/ai-video/yamaha-motorcycle.mp4",
@@ -140,8 +117,41 @@
       "featured": false
     },
     {
+      "id": "ai-anastasia-lip",
+      "type": "AI Video",
+      "style": "IGC",
+      "title": "Anastasia Beverly Hills lip",
+      "client": "Beauty · AI concept",
+      "video": "assets/work/ai-video/anastasia-lip.mp4",
+      "poster": "assets/work/ai-video/posters/anastasia-lip.jpg",
+      "ratio": "16:9",
+      "featured": false
+    },
+    {
+      "id": "ai-skincare-routine",
+      "type": "AI Video",
+      "style": "IGC",
+      "title": "Clean skincare routine",
+      "client": "Beauty · AI concept",
+      "video": "assets/work/ai-video/skincare-routine.mp4",
+      "poster": "assets/work/ai-video/posters/skincare-routine.jpg",
+      "ratio": "16:9",
+      "featured": false
+    },
+    {
+      "id": "ai-ai-model-lookbook",
+      "type": "AI Video",
+      "style": "AGC",
+      "title": "AI model lookbook",
+      "client": "Fashion · AI concept",
+      "video": "assets/work/ai-video/ai-model-lookbook.mp4",
+      "poster": "assets/work/ai-video/posters/ai-model-lookbook.jpg",
+      "featured": false
+    },
+    {
       "id": "ai-virtual-staging",
       "type": "AI Video",
+      "style": "AGC",
       "title": "Real estate virtual staging",
       "client": "Real estate · AI concept",
       "video": "assets/work/ai-video/virtual-staging.mp4",
@@ -152,6 +162,7 @@
     {
       "id": "ai-architectural-visualization",
       "type": "AI Video",
+      "style": "AGC",
       "title": "Architectural visualization",
       "client": "Real estate · AI concept",
       "video": "assets/work/ai-video/architectural-visualization.mp4",
@@ -233,5 +244,41 @@
       "unit": "leads in the DMs",
       "line": "Views that turned into sales."
     }
-  ]
+  ],
+  "ai_video": {
+    "title": "AI video, sorted by content type",
+    "intro": "Every clip in this section was made with generative AI, styled the way each type of content looks in the wild.",
+    "styles": [
+      {
+        "code": "UGC",
+        "name": "User-Generated Content",
+        "who": "Everyday customers and fans",
+        "example": "An unpaid TikTok review or a customer photo wearing a brand's outfit."
+      },
+      {
+        "code": "BGC",
+        "name": "Brand-Generated Content",
+        "who": "The company's internal marketing team",
+        "example": "Official product launch trailers, polished studio ads, and brand blog posts."
+      },
+      {
+        "code": "EGC",
+        "name": "Employee-Generated Content",
+        "who": "Company employees and founders",
+        "example": "A \"day in the life at the office\" video posted by a staff member."
+      },
+      {
+        "code": "IGC",
+        "name": "Influencer-Generated Content",
+        "who": "Paid creators and public figures",
+        "example": "A sponsored Instagram Reel or YouTube integration from a creator."
+      },
+      {
+        "code": "AGC",
+        "name": "AI-Generated Content",
+        "who": "Generative AI tools",
+        "example": "AI-created product photos, synthetic video avatars, or AI-written ad copy."
+      }
+    ]
+  }
 }

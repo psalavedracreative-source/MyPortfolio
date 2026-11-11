@@ -27,6 +27,8 @@ export type WorkItem = {
   video?: string;
   /** Frame shape, e.g. "9:16", "16:9", "4:5", "1:1". Defaults: video 9:16, everything else 4:5. */
   ratio?: string;
+  /** AI Video only: UGC | BGC | EGC | IGC | AGC (see ai_video.styles in work.json). */
+  style?: string;
   /** Set to false when a video has no audio track, to hide the sound button. */
   sound?: boolean;
   poster?: string;
@@ -80,4 +82,6 @@ export const videoFor = (path: unknown): string | undefined =>
 // ---------- work ----------
 export const workTypes = ['Reels', 'Carousels', 'AI Video', 'Ads', 'Websites'] as const;
 export const workItems = work.items as WorkItem[];
+export type AiStyle = { code: string; name: string; who: string; example: string };
+export const aiVideo = work.ai_video as { title: string; intro: string; styles: AiStyle[] };
 export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

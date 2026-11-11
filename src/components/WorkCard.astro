@@ -7,7 +7,7 @@ interface Props { item: WorkItem; index: number }
 const { item, index } = Astro.props;
 
 const tagFor: Record<string, string> = { Reels: 'Reel', Carousels: 'Carousel', 'AI Video': 'AI video', Ads: 'Ad', Websites: 'Website' };
-const tag = tagFor[item.type] ?? item.type;
+const tag = item.type === 'AI Video' && item.style ? `AI · ${item.style}` : tagFor[item.type] ?? item.type;
 const type = slugify(item.type);
 
 const video = videoFor(item.video);
