@@ -131,6 +131,9 @@ ul, ol { padding: 0; list-style: none; }
 .cta-band p { color: var(--muted); margin-top: 8px; font-size: 1.0625rem; }
 .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
+/* full-screen chat sheet on phones: keep the page behind it still */
+@media (max-width: 600px) { body.chat-open { overflow: hidden; } }
+
 /* ---------- motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

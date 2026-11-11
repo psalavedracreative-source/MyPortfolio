@@ -1,3 +1,117 @@
 ---
+import Icon from './Icon.astro';
+import { faq, site, bookingUrl, dmUrl, email, formEndpoint } from '../lib/content';
+// Everything the chat needs, read once from content/assistant-faq.json + site.json.
+const data = { faq, bookingUrl, dmUrl, email, formEndpoint, owner: site.owner.split(' ')[0] };
 ---
-<div data-assistant-stub></div>
+<div class="assistant" data-assistant>
+  <button class="launcher" type="button" data-launcher aria-expanded="false" aria-controls="assistant-panel" aria-label={`Ask ${faq.assistant_name}`}>
+    <span class="l-chat"><Icon name="chat" size={26} /></span>
+    <span class="l-close"><Icon name="close" size={24} /></span>
+  </button>
+
+  <section class="panel" id="assistant-panel" role="dialog" aria-modal="false" aria-labelledby="assistant-title" data-panel hidden>
+    <header class="p-head">
+      <span class="p-av" aria-hidden="true">{data.owner.charAt(0)}</span>
+      <div>
+        <h2 id="assistant-title">Ask {faq.assistant_name}</h2>
+        <p class="p-status"><span class="p-dot" aria-hidden="true"></span>Online now</p>
+      </div>
+      <button class="p-close" type="button" data-close aria-label="Close chat"><Icon name="close" size={20} /></button>
+    </header>
+    <div class="p-log" role="log" aria-live="polite" aria-relevant="additions" data-log></div>
+    <div class="p-chips" data-chips></div>
+    <form class="p-form" data-form autocomplete="off">
+      <label class="sr-only" for="assistant-input">Type your question</label>
+      <input id="assistant-input" name="q" type="text" placeholder="Type your question..." maxlength="300" data-input />
+      <button type="submit" aria-label="Send"><Icon name="send" size={20} /></button>
+    </form>
+  </section>
+  <script type="application/json" data-assistant-data set:html={JSON.stringify(data)} />
+</div>
+
+<style>
+  .launcher {
+    position: fixed; right: max(18px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); z-index: 90;
+    width: 62px; height: 62px; border-radius: 50%; border: 0; cursor: pointer;
+    background: var(--accent); color: var(--accent-ink); display: grid; place-items: center;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .45), 0 0 0 0 rgba(200, 245, 74, .5);
+    transition: transform .25s var(--ease), background .2s;
+    animation: nudge 2.4s ease-out 3s 2;
+  }
+  .launcher:hover { transform: scale(1.06); background: var(--accent-hover); }
+  .launcher .l-close, .launcher[aria-expanded='true'] .l-chat { display: none; }
+  .launcher[aria-expanded='true'] .l-close { display: block; }
+  @keyframes nudge { 0% { box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 0 0 rgba(200,245,74,.5) } 70% { box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 0 16px rgba(200,245,74,0) } 100% { box-shadow: 0 14px 34px rgba(0,0,0,.45), 0 0 0 0 rgba(200,245,74,0) } }
+
+  .panel {
+    position: fixed; right: max(18px, env(safe-area-inset-right)); bottom: calc(max(18px, env(safe-area-inset-bottom)) + 76px); z-index: 95;
+    width: min(400px, calc(100vw - 36px)); height: min(620px, calc(100dvh - 120px));
+    display: flex; flex-direction: column;
+    background: var(--surface); border: var(--border); border-radius: var(--r-lg);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .6); overflow: hidden;
+    transform-origin: bottom right; animation: pop .25s var(--ease);
+  }
+  .panel[hidden] { display: none; }
+  @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(.97) } }
+
+  .p-head { display: flex; align-items: center; gap: 12px; padding: 16px 16px 16px 18px; border-bottom: 2px solid var(--line); }
+  .p-av { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-weight: 800; font-size: 1.125rem; flex: none; }
+  .p-head h2 { font-size: 1.0625rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.2; }
+  .p-status { display: flex; align-items: center; gap: 6px; font-size: .8125rem; font-weight: 600; color: var(--accent); }
+  .p-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .p-close { margin-left: auto; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--line); background: transparent; color: var(--text); display: grid; place-items: center; cursor: pointer; }
+  .p-close:hover { border-color: var(--line-2); }
+
+  .p-log { flex: 1; overflow-y: auto; padding: 18px 16px 8px; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; overscroll-behavior: contain; }
+  .p-log :global(.msg) { max-width: 86%; padding: 11px 15px; border-radius: 16px; font-size: .9375rem; line-height: 1.5; white-space: pre-line; overflow-wrap: anywhere; animation: pop .2s var(--ease); }
+  .p-log :global(.msg.bot) { align-self: flex-start; background: var(--bg); border: 2px solid var(--line); border-bottom-left-radius: 6px; }
+  .p-log :global(.msg.me) { align-self: flex-end; background: var(--accent); color: var(--accent-ink); font-weight: 600; border-bottom-right-radius: 6px; }
+  .p-log :global(.typing) { display: inline-flex; gap: 4px; padding: 14px 16px; }
+  .p-log :global(.typing i) { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1s infinite; }
+  .p-log :global(.typing i:nth-child(2)) { animation-delay: .15s; }
+  .p-log :global(.typing i:nth-child(3)) { animation-delay: .3s; }
+  @keyframes blink { 0%, 80%, 100% { opacity: .25 } 40% { opacity: 1 } }
+  .p-log :global(.msg-action) { display: inline-flex; margin-top: 10px; }
+  .p-log :global(.lead-form) { align-self: stretch; display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 2px solid var(--line); border-radius: 16px; background: var(--bg); }
+  .p-log :global(.lead-form label) { font-size: .8125rem; font-weight: 700; color: var(--text-2); }
+  .p-log :global(.lead-form input), .p-log :global(.lead-form textarea) { width: 100%; font: inherit; font-size: .9375rem; color: var(--text); background: var(--surface); border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+  .p-log :global(.lead-form textarea) { min-height: 76px; resize: vertical; }
+  .p-log :global(.lead-form input:focus), .p-log :global(.lead-form textarea:focus) { outline: none; border-color: var(--accent); }
+  .p-log :global(.lead-form .btn) { margin-top: 4px; }
+  .p-log :global(.lead-ok) { color: var(--accent); font-weight: 700; }
+  .p-log :global(.lead-err) { color: #ff8a8a; font-size: .875rem; }
+
+  .p-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 16px 12px; }
+  .p-chips:empty { display: none; }
+  .p-chips :global(button) { min-height: 38px; padding: 7px 14px; border-radius: 999px; border: 2px solid var(--line-2); background: transparent; color: var(--text); font-size: .875rem; font-weight: 600; cursor: pointer; transition: border-color .2s, color .2s; }
+  .p-chips :global(button:hover) { border-color: var(--accent); color: var(--accent); }
+
+  .p-form { display: flex; align-items: center; gap: 8px; margin: 0 14px 14px; padding: 6px 6px 6px 16px; border: 2px solid var(--line); border-radius: 999px; background: var(--bg); }
+  .p-form:focus-within { border-color: var(--accent); }
+  .p-form input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--text); font: inherit; font-size: 1rem; padding: 8px 0; }
+  .p-form input:focus { outline: none; }
+  .p-form button { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; cursor: pointer; flex: none; }
+
+  @media (max-width: 600px) {
+    .panel { inset: 0; width: 100%; height: 100dvh; border-radius: 0; border: 0; animation-name: sheet; padding-top: env(safe-area-inset-top); }
+    .assistant:has(.panel:not([hidden])) .launcher { display: none; }
+    @keyframes sheet { from { transform: translateY(24px); opacity: 0 } }
+  }
+  @media (prefers-reduced-motion: reduce) { .launcher { animation: none; } }
+</style>
+
+<script>
+  // The chat code (and Fuse.js) only loads on first open; the language model loads after that.
+  const root = document.querySelector<HTMLElement>('[data-assistant]');
+  if (root) {
+    const launcher = root.querySelector<HTMLButtonElement>('[data-launcher]')!;
+    let ready: Promise<{ toggle: (open?: boolean) => void }> | null = null;
+    const load = () => (ready ??= import('../scripts/assistant/chat').then((m) => m.initChat(root)));
+    launcher.addEventListener('click', () => load().then((c) => c.toggle()));
+    // reopen if the visitor navigated while the chat was open (e.g. "See the work")
+    let reopen = false;
+    try { reopen = sessionStorage.getItem('pbg-chat-open') === '1'; } catch { /* storage blocked */ }
+    if (reopen) load().then((c) => c.toggle(true));
+  }
+</script>
