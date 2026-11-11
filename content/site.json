@@ -38,7 +38,11 @@
     { "name": "PH Exam Reviewer", "logo": "assets/logos/ph-exam-reviewer.png" }
   ],
   "testimonials": [
-    { "quote": "[Short client testimonial]", "name": "[Client name]", "brand": "[Brand]" }
+    { "quote": "Patrick is an excellent social media VA - he listened carefully to instructions and responded well to feedback. I would 100% hire him again in the future. Thanks Patrick!", "highlight": "I would 100% hire him again", "name": "", "brand": "", "source": "Endorsed by client", "featured": true },
+    { "quote": "Patrick is a highly reliable designer who takes instructions well and delivers top-tier results. He is prompt, communicates clearly, and takes feedback constructively. We will definitely work with him again on future projects!", "highlight": "delivers top-tier results", "name": "", "brand": "", "source": "Endorsed by client" },
+    { "quote": "Patrick was an absolute pleasure to collaborate with. He brought great creative energy to our social media campaigns, consistently delivering eye-catching graphic designs and engaging video content. His communication is always open to feedback. Looking forward to working with him again!", "highlight": "an absolute pleasure to collaborate with", "name": "", "brand": "", "source": "Endorsed by client" },
+    { "quote": "Patrick was very responsive, eager to complete the work, and moved quickly throughout the project. He created a good video slideshow for us, and we were able to use several elements from his work, including the voiceover. He was also pleasant and easy to communicate with.", "highlight": "very responsive", "name": "", "brand": "", "source": "Client review" },
+    { "quote": "Patrick does his best work under supervision doing some great designs.", "highlight": "", "name": "", "brand": "", "source": "Client review", "show": false }
   ],
   "form_endpoint": "[FORM_ENDPOINT_URL e.g. Formspree or Web3Forms]"
 }

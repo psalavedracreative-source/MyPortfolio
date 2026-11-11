@@ -23,7 +23,7 @@ npm run preview   # serve the production build locally
 
 ```
 content/            ← ALL the words, links and numbers (edit these)
-  site.json           business info, booking link, promises, process, client logos, testimonial, form endpoint
+  site.json           business info, booking link, promises, process, client logos, testimonials, form endpoint
   services.json       the 6 service cards
   work.json           work samples (Work page) + the home-page proof cover flow
   about.json          bio, stat tiles, documentary chapters, certificates, gallery
@@ -106,6 +106,10 @@ Add an intent to `content/assistant-faq.json`:
 
 **How it matches** (all in the visitor's browser, no API key): it normalizes the message (including common Taglish like *magkano*, *paano*, *pwede*), checks keywords, fuzzy-matches the example questions with Fuse.js, and, once the chat has been opened, compares meaning with a small language model (`Xenova/all-MiniLM-L6-v2` via Transformers.js, about 23 MB, downloaded once and cached; example embeddings are cached in IndexedDB). The thresholds are at the top of `src/scripts/assistant/match.ts`.
 
+### Testimonials
+
+Edit `testimonials` in `content/site.json`. Each has the `quote` (word for word), an optional `highlight` (a phrase copied exactly from the quote, shown in lime), optional `name` and `brand`, a `source` label such as "Endorsed by client", `featured: true` for the one shown large at the top, and `show: false` to keep one off the site without deleting it.
+
 ### Colors
 
 Edit `brand/brand.json`. The lime accent, background, card color, text and muted text all come from there.
@@ -150,7 +154,7 @@ In the editor you can change the work library and cover flow, the About page (do
 - `cta_primary.url`: `[GOOGLE_CALENDAR_BOOKING_LINK]`
 - `links.email`: `[YOUR_PUBLIC_EMAIL]`
 - `client_logos`: BikeAddict has no logo file yet (shows a "BA" badge)
-- `testimonials[0]`: `[Short client testimonial]`, `[Client name]`, `[Brand]`
+- `testimonials`: no client names or brands yet (optional `name` / `brand`; adding them makes the quotes more convincing)
 - `form_endpoint`: `[FORM_ENDPOINT_URL e.g. Formspree or Web3Forms]`
 
 **content/work.json**
