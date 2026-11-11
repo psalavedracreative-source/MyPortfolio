@@ -194,6 +194,8 @@ collections:
               - { name: name, label: "Client name (optional)", widget: string, required: false }
               - { name: brand, label: "Brand (optional)", widget: string, required: false }
               - { name: source, label: "Label (e.g. Endorsed by client)", widget: string, required: false }
+              - { name: platform, label: "Platform name (e.g. Upwork, OnlineJobs.ph)", widget: string, required: false }
+              - { name: url, label: "Link to the review or your profile there (https://…)", widget: string, required: false }
               - { name: featured, label: "Featured (shown large, first)", widget: boolean, default: false, required: false }
               - { name: show, label: "Show on the site", widget: boolean, default: true, required: false }
           - { name: form_endpoint, label: "Form endpoint (Formspree / Web3Forms URL)", widget: string }

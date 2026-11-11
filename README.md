@@ -108,7 +108,7 @@ Add an intent to `content/assistant-faq.json`:
 
 ### Testimonials
 
-Edit `testimonials` in `content/site.json`. Each has the `quote` (word for word), an optional `highlight` (a phrase copied exactly from the quote, shown in lime), optional `name` and `brand`, a `source` label such as "Endorsed by client", `featured: true` for the one shown large at the top, and `show: false` to keep one off the site without deleting it.
+Edit `testimonials` in `content/site.json`. Each has the `quote` (word for word), an optional `highlight` (a phrase copied exactly from the quote, shown in lime), optional `name` and `brand`, a `source` label such as "Endorsed by client", `platform` and `url` (adds a "View on Upwork"-style link that opens the review on the freelancing platform in a new tab; with no `platform` it reads "View original review"), `featured: true` for the one shown large at the top, and `show: false` to keep one off the site without deleting it.
 
 ### Colors
 
@@ -154,7 +154,7 @@ In the editor you can change the work library and cover flow, the About page (do
 - `cta_primary.url`: `[GOOGLE_CALENDAR_BOOKING_LINK]`
 - `links.email`: `[YOUR_PUBLIC_EMAIL]`
 - `client_logos`: BikeAddict has no logo file yet (shows a "BA" badge)
-- `testimonials`: no client names or brands yet (optional `name` / `brand`; adding them makes the quotes more convincing)
+- `testimonials`: no `platform` / `url` links to the original reviews yet; no client names or brands yet (optional `name` / `brand`; adding them makes the quotes more convincing)
 - `form_endpoint`: `[FORM_ENDPOINT_URL e.g. Formspree or Web3Forms]`
 
 **content/work.json**

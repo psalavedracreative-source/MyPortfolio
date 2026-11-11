@@ -1,8 +1,8 @@
 ---
 import Icon from './Icon.astro';
-import { site, isPlaceholder } from '../lib/content';
+import { site, isPlaceholder, isRealUrl } from '../lib/content';
 
-type T = { quote: string; highlight?: string; name?: string; brand?: string; source?: string; featured?: boolean; show?: boolean };
+type T = { quote: string; highlight?: string; name?: string; brand?: string; source?: string; platform?: string; url?: string; featured?: boolean; show?: boolean };
 const all = (site.testimonials as T[]).filter((t) => t.show !== false && t.quote?.trim());
 
 // Split a quote around its highlighted phrase so that phrase can be set in lime.
@@ -39,6 +39,12 @@ const items = featured ? [{ t: featured, big: true }, ...rest.map((t) => ({ t, b
                   ? <><span class="av" aria-hidden="true">{initial(t) || 'C'}</span><span class="by">{by}</span></>
                   : null}
                 {t.source && <span class="src"><span class="tick" aria-hidden="true"><Icon name="check" size={13} /></span>{t.source}</span>}
+                {isRealUrl(t.url) && (
+                  <a class="view" href={t.url} target="_blank" rel="noopener noreferrer">
+                    {t.platform?.trim() ? `View on ${t.platform.trim()}` : 'View original review'}
+                    <Icon name="external" size={15} /><span class="sr-only"> (opens in a new tab)</span>
+                  </a>
+                )}
               </figcaption>
             </figure>
           </li>
@@ -60,6 +66,8 @@ const items = featured ? [{ t: featured, big: true }, ...rest.map((t) => ({ t, b
   .av { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-weight: 800; }
   .by { font-weight: 700; }
   .src { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: .875rem; font-weight: 600; }
+  .view { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: var(--text); font-size: .875rem; font-weight: 700; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent) 60%, transparent); text-underline-offset: 4px; transition: color .2s; }
+  .view:hover { color: var(--accent); }
   .tick { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; }
 
   /* The featured quote spans the full width, set large, with a soft lime glow. */
