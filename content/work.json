@@ -1,0 +1,64 @@
+{
+  "_how_to_add": "Add one object per sample. type = Reels | Carousels | Ads | Websites. Put media in assets/work/... and point to it. featured=true puts it in the home-page proof cover flow.",
+  "items": [
+    {
+      "id": "reels-no-clients-reel",
+      "type": "Reels",
+      "title": "Views to clients",
+      "client": "Patrick Brand Growth",
+      "video": "assets/work/reels/reels-no-clients-reel.mp4",
+      "poster": "assets/work/carousels/reels-no-clients/reels-no-clients_01.png",
+      "stat": "[X] views",
+      "featured": false
+    },
+    {
+      "id": "reels-no-clients-carousel",
+      "type": "Carousels",
+      "title": "Why no clients?",
+      "client": "Patrick Brand Growth",
+      "slides": [
+        "assets/work/carousels/reels-no-clients/reels-no-clients_01.png",
+        "assets/work/carousels/reels-no-clients/reels-no-clients_02.png",
+        "assets/work/carousels/reels-no-clients/reels-no-clients_03.png",
+        "assets/work/carousels/reels-no-clients/reels-no-clients_04.png",
+        "assets/work/carousels/reels-no-clients/reels-no-clients_05.png",
+        "assets/work/carousels/reels-no-clients/reels-no-clients_06.png"
+      ],
+      "stat": "[X] saves",
+      "featured": false
+    },
+    {
+      "id": "website-sneak-peek-reel",
+      "type": "Reels",
+      "title": "Website sneak peek",
+      "client": "Patrick Brand Growth",
+      "video": "assets/work/reels/web-sneak-peek-v2-reel.mp4",
+      "poster": "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_01.png",
+      "stat": "[X] views",
+      "featured": false
+    },
+    {
+      "id": "website-sneak-peek-carousel",
+      "type": "Carousels",
+      "title": "New website, 3 pages",
+      "client": "Patrick Brand Growth",
+      "slides": [
+        "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_01.png",
+        "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_02.png",
+        "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_03.png",
+        "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_04.png",
+        "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_05.png",
+        "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_06.png"
+      ],
+      "stat": "[X] saves",
+      "featured": false
+    }
+  ],
+  "proof_coverflow": [
+    { "tag": "Reels", "client": "[Client name]", "cover": "[cover image]", "stat": "2.4M+", "unit": "views", "line": "Engineered to stop the scroll." },
+    { "tag": "Carousels", "client": "[Client name]", "cover": "[cover image]", "stat": "[X]K+", "unit": "saves", "line": "Content people come back to." },
+    { "tag": "Meta ads", "client": "[Client name]", "cover": "[cover image]", "stat": "[X]x", "unit": "return on ad spend", "line": "Every peso working harder." },
+    { "tag": "Short-form video", "client": "[Client name]", "cover": "[cover image]", "stat": "[X]K+", "unit": "new followers", "line": "An audience, not just a feed." },
+    { "tag": "UGC / AIGC", "client": "[Client name]", "cover": "[cover image]", "stat": "[X]+", "unit": "leads in the DMs", "line": "Views that turned into sales." }
+  ]
+}

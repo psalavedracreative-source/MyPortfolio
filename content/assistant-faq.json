@@ -1,0 +1,134 @@
+{
+  "_note": "Knowledge base for the on-site assistant. No AI API. Each intent: example questions (used for fuzzy + semantic matching), keywords, the answer, and quick-reply chips. Edit answers anytime. Anything in [BRACKETS] must be filled in by Patrick.",
+  "assistant_name": "Patrick's assistant",
+  "greeting": "Hi! I'm Patrick's assistant. Ask me about services, packages, timelines or how we'd work together.",
+  "starter_chips": ["What services do you offer?", "How much does it cost?", "How does it work?", "Book a call"],
+  "fallback": {
+    "answer": "Good question. I'm not sure about that one, so let me pass it to Patrick. Leave your email and he'll reply within 24 hours, or book a quick call.",
+    "chips": ["Leave my email", "Book a call"]
+  },
+  "intents": [
+    {
+      "id": "greeting",
+      "examples": ["hi", "hello", "hey there", "good morning", "kumusta"],
+      "keywords": ["hi", "hello", "hey", "kumusta"],
+      "answer": "Hi! What can I help you with today? You can ask about services, packages or how the process works.",
+      "chips": ["Services", "Packages", "Process"]
+    },
+    {
+      "id": "services",
+      "examples": ["what services do you offer", "what do you do", "can you manage my social media", "what can you help me with"],
+      "keywords": ["services", "offer", "do you do", "help with", "manage"],
+      "answer": "Patrick offers social media management, content strategy, short-form video editing, graphics and ad creative, AIGC/UGC content, and Meta ads support for brands, businesses and creators.",
+      "chips": ["Packages", "See the work", "Book a call"]
+    },
+    {
+      "id": "pricing",
+      "examples": ["how much does it cost", "what are your rates", "price for monthly management", "packages and pricing", "magkano"],
+      "keywords": ["price", "cost", "rate", "rates", "package", "packages", "budget", "magkano", "how much"],
+      "answer": "It depends on how many posts and videos you need each month. [PACKAGE SUMMARY, e.g. Starter from ₱X / Growth from ₱X / Full from ₱X]. The fastest way to get an exact quote is a free 15-minute call.",
+      "chips": ["Book a call", "What's included?"]
+    },
+    {
+      "id": "included",
+      "examples": ["what is included in a package", "what do i get", "how many posts per month"],
+      "keywords": ["included", "include", "get", "posts per month", "deliverables"],
+      "answer": "Every package includes a content plan, design and editing, captions, and posting. [Add per-package details: number of posts, reels, stories, ad support.]",
+      "chips": ["Packages", "Book a call"]
+    },
+    {
+      "id": "turnaround",
+      "examples": ["how long does it take", "turnaround time", "when can you start", "how fast can you deliver"],
+      "keywords": ["how long", "turnaround", "deadline", "start", "fast", "deliver", "timeline"],
+      "answer": "Turnaround depends on the package you choose. [Typical first-delivery time, e.g. first batch within X days.] We'll set clear dates on our call.",
+      "chips": ["Book a call", "Process"]
+    },
+    {
+      "id": "payment",
+      "examples": ["how do i pay", "payment terms", "do you need a downpayment", "payment methods"],
+      "keywords": ["pay", "payment", "downpayment", "deposit", "gcash", "bank", "paypal"],
+      "answer": "Payment is 50/50: 50% to start and 50% when you're happy with the work. [Payment methods, e.g. GCash, bank transfer, PayPal.]",
+      "chips": ["Revisions", "Book a call"]
+    },
+    {
+      "id": "revisions",
+      "examples": ["how many revisions", "what if i don't like it", "can i ask for changes"],
+      "keywords": ["revision", "revisions", "changes", "edit", "don't like", "redo"],
+      "answer": "Unlimited revisions, until it's right. You only pay the second 50% once you're happy.",
+      "chips": ["Payment", "Book a call"]
+    },
+    {
+      "id": "reply_time",
+      "examples": ["how fast do you reply", "how do i contact you", "are you available"],
+      "keywords": ["reply", "respond", "contact", "available", "reach"],
+      "answer": "Patrick replies within 24 hours, usually faster. You can book a call, leave your email here, or DM \"GROW\" on Instagram @patrickbrandgrowth.",
+      "chips": ["Book a call", "Leave my email"]
+    },
+    {
+      "id": "process",
+      "examples": ["how does it work", "what is the process", "what happens after i book", "steps to start"],
+      "keywords": ["process", "how does it work", "steps", "after i book", "onboarding"],
+      "answer": "It's 4 steps: 1) Book a call. 2) We plan your goals, scope and package. 3) I create, with 50% to start and unlimited revisions. 4) We launch and you pay the other 50% once you're happy.",
+      "chips": ["Book a call", "Packages"]
+    },
+    {
+      "id": "booking",
+      "examples": ["book a call", "schedule a meeting", "can we talk", "free consultation"],
+      "keywords": ["book", "call", "schedule", "meeting", "consultation", "talk"],
+      "answer": "Easy. Pick a time that works for you here: [GOOGLE_CALENDAR_BOOKING_LINK]. The first call is free.",
+      "chips": ["Leave my email"],
+      "action": "open_booking"
+    },
+    {
+      "id": "platforms",
+      "examples": ["which platforms do you handle", "do you do tiktok", "can you do facebook and instagram", "youtube shorts"],
+      "keywords": ["platform", "tiktok", "instagram", "facebook", "youtube", "linkedin", "shorts"],
+      "answer": "Instagram, Facebook, TikTok and YouTube Shorts. [Add or remove platforms you cover.]",
+      "chips": ["Services", "See the work"]
+    },
+    {
+      "id": "ads",
+      "examples": ["do you run facebook ads", "meta ads", "how much ad budget do i need", "paid ads"],
+      "keywords": ["ads", "meta ads", "facebook ads", "ad budget", "boost", "paid"],
+      "answer": "Yes. Patrick supports Meta ads: campaign setup, ad creative and optimization to bring in leads. Your ad budget is separate from the service fee. [Recommended minimum budget.]",
+      "chips": ["Packages", "Book a call"]
+    },
+    {
+      "id": "portfolio",
+      "examples": ["can i see your work", "portfolio", "samples", "results for other clients"],
+      "keywords": ["work", "portfolio", "samples", "results", "examples", "proof"],
+      "answer": "Of course. The Work page has reels, carousels, ads and websites, with the results they got.",
+      "chips": ["See the work", "Book a call"],
+      "action": "go_work"
+    },
+    {
+      "id": "needs",
+      "examples": ["what do you need from me", "do i need to provide content", "do i need to film"],
+      "keywords": ["need from me", "provide", "film", "photos", "access", "requirements"],
+      "answer": "Usually your brand basics (logo, colors), access to your pages, and any photos or videos you already have. If you don't have content, AIGC/UGC can fill the gap.",
+      "chips": ["Services", "Book a call"]
+    },
+    {
+      "id": "location",
+      "examples": ["where are you based", "do you work with international clients", "are you remote"],
+      "keywords": ["where", "based", "location", "international", "remote", "philippines"],
+      "answer": "Patrick is based in Surigao del Sur, Philippines, and works with clients remotely.",
+      "chips": ["Book a call"]
+    },
+    {
+      "id": "websites",
+      "examples": ["do you make websites", "can you build a landing page", "web design"],
+      "keywords": ["website", "landing page", "web design", "site"],
+      "answer": "Yes. Patrick also designs landing pages that turn visitors into clients, like this one. [Add pricing or a package note.]",
+      "chips": ["See the work", "Book a call"]
+    },
+    {
+      "id": "lead",
+      "examples": ["leave my email", "contact me", "send me details", "i want a quote"],
+      "keywords": ["email", "contact me", "quote", "details", "message"],
+      "answer": "Great. Share your name, email and a line about your brand, and Patrick will reply within 24 hours.",
+      "chips": [],
+      "action": "show_lead_form"
+    }
+  ]
+}

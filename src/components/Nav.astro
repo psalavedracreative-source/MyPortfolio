@@ -1,0 +1,95 @@
+---
+import { site, bookingUrl } from '../lib/content';
+interface Props { page: 'home' | 'work' | 'about' }
+const { page } = Astro.props;
+const links = [
+  { href: '/', label: 'Home', id: 'home' },
+  { href: '/work', label: 'Work', id: 'work' },
+  { href: '/about', label: 'About', id: 'about' },
+];
+---
+<header class="nav" data-nav>
+  <div class="container nav-inner">
+    <a href="/" class="logo" aria-label={`${site.brand}, home`}>
+      <span class="logo-dot" aria-hidden="true"></span>{site.brand}
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav-links" id="nav-links" data-nav-links>
+        {links.map((l) => (
+          <li><a href={l.href} aria-current={page === l.id ? 'page' : undefined}>{l.label}</a></li>
+        ))}
+        <li class="nav-book-mobile"><a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noopener">{site.cta_primary.label}</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a class="btn btn-primary btn-sm nav-book" href={bookingUrl} target="_blank" rel="noopener">Book a call</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links" data-menu-btn>
+        <span class="sr-only">Menu</span><i></i><i></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky; top: 0; z-index: 60;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s;
+  }
+  .nav[data-scrolled] { border-bottom-color: var(--line); }
+  .nav-inner { height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.0625rem; letter-spacing: -0.01em; white-space: nowrap; }
+  .logo-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); flex: none; }
+  .nav-links { display: flex; align-items: center; gap: 30px; font-weight: 600; }
+  .nav-links a:not(.btn) { color: var(--muted); transition: color .2s; padding: 6px 0; }
+  .nav-links a:not(.btn):hover { color: var(--text); }
+  .nav-links a[aria-current='page'] { color: var(--accent); }
+  .nav-book-mobile { display: none; }
+  .nav-right { display: flex; align-items: center; gap: 10px; }
+  .menu-btn { display: none; position: relative; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--line); background: transparent; cursor: pointer; }
+  .menu-btn i { position: absolute; left: 12px; right: 12px; height: 2px; border-radius: 2px; background: var(--text); transition: transform .3s var(--ease), top .3s var(--ease); }
+  .menu-btn i:first-of-type { top: 16px; }
+  .menu-btn i:last-of-type { top: 24px; }
+  .menu-btn[aria-expanded='true'] i:first-of-type { top: 20px; transform: rotate(45deg); }
+  .menu-btn[aria-expanded='true'] i:last-of-type { top: 20px; transform: rotate(-45deg); }
+
+  @media (max-width: 760px) {
+    .menu-btn { display: block; }
+    .nav-links {
+      position: fixed; inset: var(--nav-h) 0 auto 0;
+      flex-direction: column; align-items: stretch; gap: 4px;
+      padding: 16px var(--gutter) 24px; background: var(--bg); border-bottom: 2px solid var(--line);
+      font-size: 1.25rem;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: opacity .25s, transform .25s var(--ease), visibility 0s linear .25s;
+    }
+    .nav-links[data-open] { opacity: 1; visibility: visible; transform: none; transition: opacity .25s, transform .25s var(--ease); }
+    .nav-links a:not(.btn) { display: block; padding: 12px 0; }
+    .nav-book-mobile { display: block; margin-top: 10px; }
+    .nav-book-mobile .btn { width: 100%; }
+  }
+  @media (max-width: 420px) {
+    .logo { font-size: .9375rem; }
+    /* the open menu carries a full-width "Book a free call" button */
+    .nav-book { display: none; }
+  }
+</style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]')!;
+  const links = document.querySelector<HTMLElement>('[data-nav-links]')!;
+  const setOpen = (open: boolean) => {
+    btn.setAttribute('aria-expanded', String(open));
+    links.toggleAttribute('data-open', open);
+  };
+  btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+  links.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) setOpen(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && links.hasAttribute('data-open')) { setOpen(false); btn.focus(); } });
+  const onScroll = () => nav.toggleAttribute('data-scrolled', window.scrollY > 8);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

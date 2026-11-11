@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import { services } from '../lib/content';
+const known = ['smm', 'strategy', 'video', 'graphics', 'aigc', 'ads'] as const;
+const iconFor = (id: string) => ((known as readonly string[]).includes(id) ? id : 'strategy') as (typeof known)[number];
+---
+<section class="container section" id="services" aria-labelledby="services-title">
+  <div class="section-head">
+    <p class="kicker">Services</p>
+    <h2 class="h2" id="services-title">Everything your brand needs to <span class="lime">grow.</span></h2>
+  </div>
+  <ul class="svc-grid">
+    {services.map((s) => (
+      <li class="card svc">
+        <span class="svc-ico"><Icon name={iconFor(s.id)} size={22} /></span>
+        <h3 class="h3">{s.title}</h3>
+        <p>{s.text}</p>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .svc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .svc { padding: clamp(24px, 3vw, 32px); border-radius: var(--r-md); display: flex; flex-direction: column; gap: 10px; transition: border-color .25s, transform .3s var(--ease); }
+  .svc:hover { border-color: var(--line-2); transform: translateY(-3px); }
+  .svc-ico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: rgba(200, 245, 74, .1); color: var(--accent); margin-bottom: 10px; }
+  .svc p { color: var(--muted); }
+  @media (max-width: 960px) { .svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .svc-grid { grid-template-columns: 1fr; } }
+</style>

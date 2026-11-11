@@ -1,0 +1,23 @@
+---
+import { site } from '../lib/content';
+const t = site.testimonials[0];
+const initial = (t?.name ?? '').replace(/[^A-Za-z]/g, '').charAt(0).toUpperCase() || 'C';
+---
+{t && (
+  <section class="container section" aria-label="Client testimonial">
+    <figure class="card quote">
+      <span class="quote-av" aria-hidden="true">{initial}</span>
+      <div>
+        <blockquote><p>“{t.quote}”</p></blockquote>
+        <figcaption>{t.name} · {t.brand}</figcaption>
+      </div>
+    </figure>
+  </section>
+)}
+
+<style>
+  .quote { display: flex; align-items: flex-start; gap: 20px; padding: clamp(24px, 4vw, 40px); border-radius: var(--r-lg); }
+  .quote-av { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-weight: 800; font-size: 1.25rem; }
+  blockquote p { font-size: clamp(1.25rem, 2.6vw, 1.75rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.35; }
+  figcaption { margin-top: 12px; color: var(--muted); font-weight: 600; }
+</style>

@@ -1,0 +1,39 @@
+{
+  "brand": "Patrick Brand Growth",
+  "owner": "Patrick Salavedra",
+  "role": "Freelance social media manager",
+  "location": "Surigao del Sur, Philippines (works with clients remotely)",
+  "tagline": "Social media that brings clients, not just views.",
+  "subline": "Content strategy, short-form video, graphics and Meta ads for brands, businesses and creators.",
+  "cta_primary": { "label": "Book a free call", "url": "[GOOGLE_CALENDAR_BOOKING_LINK]" },
+  "cta_dm": { "label": "DM \"GROW\"", "url": "https://instagram.com/patrickbrandgrowth" },
+  "links": {
+    "instagram": "https://instagram.com/patrickbrandgrowth",
+    "linkedin": "https://www.linkedin.com/in/patrick-salavedra-420a6141a/",
+    "email": "[YOUR_PUBLIC_EMAIL]"
+  },
+  "promises": ["Replies within 24 hours", "Unlimited revisions", "50/50 payment"],
+  "terms": {
+    "reply_time": "Within 24 hours, usually faster.",
+    "payment": "50% to start, 50% when you're happy with the work.",
+    "revisions": "Unlimited revisions until it's right.",
+    "turnaround": "Depends on the package you choose."
+  },
+  "process": [
+    { "step": "Book a call", "text": "Pick a time that works for you on my calendar." },
+    { "step": "Plan together", "text": "We agree on goals, scope and your package." },
+    { "step": "Create", "text": "50% to start. Unlimited revisions until it's right." },
+    { "step": "Launch", "text": "Pay the other 50% once you're happy." }
+  ],
+  "client_logos": [
+    { "name": "[Client 1]", "logo": "assets/logos/[client-1].svg" },
+    { "name": "[Client 2]", "logo": "assets/logos/[client-2].svg" },
+    { "name": "[Client 3]", "logo": "assets/logos/[client-3].svg" },
+    { "name": "[Client 4]", "logo": "assets/logos/[client-4].svg" },
+    { "name": "[Client 5]", "logo": "assets/logos/[client-5].svg" }
+  ],
+  "testimonials": [
+    { "quote": "[Short client testimonial]", "name": "[Client name]", "brand": "[Brand]" }
+  ],
+  "form_endpoint": "[FORM_ENDPOINT_URL e.g. Formspree or Web3Forms]"
+}

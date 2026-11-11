@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+import { site, email } from '../lib/content';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer-inner">
+    <a href="/" class="logo"><span class="logo-dot" aria-hidden="true"></span>{site.brand}</a>
+    <ul class="footer-links">
+      <li><a href={site.links.instagram} target="_blank" rel="noopener"><Icon name="instagram" />Instagram</a></li>
+      <li><a href={site.links.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" />LinkedIn</a></li>
+      <li>
+        {email
+          ? <a href={`mailto:${email}`}><Icon name="mail" />{email}</a>
+          : <span class="placeholder"><Icon name="mail" />{site.links.email}</span>}
+      </li>
+    </ul>
+    <p class="copy">© {year} {site.owner}. {site.location}.</p>
+  </div>
+</footer>
+
+<style>
+  .footer { border-top: 2px solid var(--line); margin-top: clamp(48px, 8vw, 96px); }
+  .footer-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px; padding-block: 32px calc(32px + env(safe-area-inset-bottom, 0px)); }
+  .logo { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; }
+  .logo-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .footer-links a, .footer-links .placeholder { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--muted); font-weight: 600; font-size: .9375rem; transition: color .2s; }
+  .footer-links a:hover { color: var(--accent); }
+  .copy { width: 100%; color: var(--muted); font-size: .875rem; }
+</style>

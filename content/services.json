@@ -1,0 +1,8 @@
+[
+  { "id": "smm", "title": "Social media management", "text": "Posting, community and growth, handled." },
+  { "id": "strategy", "title": "Content strategy", "text": "Pillars and a calendar built for your goals." },
+  { "id": "video", "title": "Short-form video editing", "text": "Reels, TikToks and Shorts that hold attention." },
+  { "id": "graphics", "title": "Graphics & ad creative", "text": "On-brand posts, carousels and ads." },
+  { "id": "aigc", "title": "AIGC / UGC content", "text": "Fresh creative without a full shoot." },
+  { "id": "ads", "title": "Meta ads support", "text": "Campaigns set up to bring in leads." }
+]

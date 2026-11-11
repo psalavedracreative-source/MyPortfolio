@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+import { site, bookingUrl } from '../lib/content';
+// Headline from site.json; "clients" is the highlighted word.
+const [before, after] = site.tagline.split(/clients/);
+---
+<section class="hero container">
+  <h1 class="h1 hero-title">
+    {after !== undefined ? <>{before}<span class="lime">clients</span>{after}</> : site.tagline}
+  </h1>
+  <p class="lead hero-sub">{site.subline}</p>
+  <div class="hero-actions">
+    <a class="btn btn-primary btn-lg" href={bookingUrl} target="_blank" rel="noopener">{site.cta_primary.label}<Icon name="arrow" /></a>
+    <a class="btn btn-outline btn-lg" href="/work">See my work</a>
+  </div>
+  <ul class="promises" aria-label="My promises">
+    {site.promises.map((p) => <li><Icon name="check" size={18} />{p}</li>)}
+  </ul>
+</section>
+
+<style>
+  .hero { padding-top: clamp(48px, 9vw, 104px); padding-bottom: clamp(40px, 6vw, 64px); }
+  .hero-title { max-width: 15ch; }
+  .hero-sub { margin-top: 22px; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .promises { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 28px; color: var(--text-2); font-weight: 600; font-size: .9375rem; }
+  .promises li { display: inline-flex; align-items: center; gap: 8px; }
+  .promises :global(svg) { color: var(--accent); }
+  @media (max-width: 480px) {
+    .hero-actions .btn { flex: 1 1 100%; }
+  }
+</style>

@@ -1,0 +1,27 @@
+{
+  "headline": "Hi, I'm Patrick.",
+  "bio": "A social media manager from Surigao del Sur, helping brands, businesses and creators grow with content that converts.",
+  "hero_photo": "assets/photos/lime-portrait.png",
+  "stats": [
+    { "value": "[X]+", "label": "brands served" },
+    { "value": "[X]M+", "label": "views generated" },
+    { "value": "[X] yrs", "label": "experience" }
+  ],
+  "documentary": [
+    { "chapter": "Chapter 01", "year": "[Year]", "title": "Graduation day", "caption": "Where it started: the day the hard work paid off.", "text": "[Degree], [School]. [What this moment meant to you.]", "photo": "assets/photos/graduation.png", "alt": "Patrick at his graduation photoshoot, holding his cap" },
+    { "chapter": "Chapter 02", "year": "[Year]", "title": "[Receiving my certificate]", "caption": "Leveling up: [certification name].", "text": "[What you learned.] Replace the photo with one of you receiving the certificate.", "photo": "assets/photos/formal-portrait.png", "alt": "Patrick in a black suit, studio portrait" },
+    { "chapter": "Chapter 03", "year": "[Year]", "title": "[First client win]", "caption": "Out in the field, creating for real brands.", "text": "[Your first client and the result you got them.]", "photo": "assets/photos/outdoor-portrait.png", "alt": "Patrick outdoors in a black polo shirt" },
+    { "chapter": "Today", "year": "Now", "title": "Patrick Brand Growth", "caption": "Helping brands grow with content that converts.", "text": "Social media management, content strategy, short-form video, graphics, AIGC/UGC and Meta ads support.", "photo": "assets/photos/lime-portrait.png", "alt": "Patrick in a black t-shirt in front of a lime backdrop" }
+  ],
+  "certificates": [
+    { "name": "[Certificate name]", "issuer": "[Issuer]", "year": "[Year]", "photo": "[assets/photos/certificates/...]" },
+    { "name": "[Certificate name]", "issuer": "[Issuer]", "year": "[Year]", "photo": "[assets/photos/certificates/...]" },
+    { "name": "[Certificate name]", "issuer": "[Issuer]", "year": "[Year]", "photo": "[assets/photos/certificates/...]" }
+  ],
+  "gallery": [
+    { "photo": "[assets/photos/gallery/on-a-shoot.jpg]", "caption": "[On a shoot]" },
+    { "photo": "[assets/photos/gallery/editing-setup.jpg]", "caption": "[Editing setup]" },
+    { "photo": "[assets/photos/gallery/with-a-client.jpg]", "caption": "[With a client]" },
+    { "photo": "[assets/photos/gallery/event.jpg]", "caption": "[Event or seminar]" }
+  ]
+}
