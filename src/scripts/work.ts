@@ -12,22 +12,38 @@ export function initWork(root: HTMLElement) {
 function initFilters(root: HTMLElement) {
   const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
   const tiles = [...root.querySelectorAll<HTMLElement>('[data-type]')];
-  const groups = [...root.querySelectorAll<HTMLElement>('[data-group]')];
+  const infos = [...root.querySelectorAll<HTMLElement>('[data-style-info]')];
   const status = root.querySelector<HTMLElement>('[data-filter-status]');
+  const more = root.querySelector<HTMLButtonElement>('[data-more]');
+  const moreLabel = more?.querySelector<HTMLElement>('[data-more-label]');
+  const moreCount = more?.querySelector<HTMLElement>('[data-more-count]');
+  const limit = Number(root.dataset.limit) || Infinity;
   const valid = new Set(chips.map((c) => c.dataset.filter));
+  let current = 'all';
+  let expanded = false;
 
   const apply = (value: string, push: boolean) => {
     if (!valid.has(value)) value = 'all';
+    current = value;
     chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === value)));
+    infos.forEach((el) => { el.hidden = el.dataset.styleInfo !== value; });
+    // "All" shows the first `limit` samples until "Show more" is pressed; a single filter shows everything in it.
+    const capped = value === 'all' && !expanded;
     let shown = 0;
     tiles.forEach((t) => {
-      const show = value === 'all' || t.dataset.type === value;
+      const match = value === 'all' || t.dataset.type === value;
+      const show = match && !(capped && shown >= limit);
       t.hidden = !show;
       if (show) shown++;
     });
-    // hide a section (main grid, AI area, each content style) when none of its tiles match
-    groups.forEach((g) => { g.hidden = !g.querySelector('[data-type]:not([hidden])'); });
-    if (status) status.textContent = `Showing ${shown} ${shown === 1 ? 'item' : 'items'}`;
+    if (more) {
+      const hiddenCount = value === 'all' ? tiles.length - Math.min(tiles.length, limit) : 0;
+      more.hidden = hiddenCount <= 0;
+      more.setAttribute('aria-expanded', String(expanded));
+      if (moreLabel) moreLabel.textContent = expanded ? 'Show less' : 'Show more work';
+      if (moreCount) moreCount.textContent = expanded ? '' : `+${hiddenCount}`;
+    }
+    if (status) status.textContent = `Showing ${shown} of ${value === 'all' ? tiles.length : shown} ${shown === 1 ? 'item' : 'items'}`;
     if (push) {
       const url = new URL(location.href);
       if (value === 'all') url.searchParams.delete('type');
@@ -37,6 +53,13 @@ function initFilters(root: HTMLElement) {
   };
 
   chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter!, true)));
+  more?.addEventListener('click', () => {
+    const wasExpanded = expanded;
+    expanded = !expanded;
+    apply(current, false);
+    // collapsing: bring the button back into view instead of leaving the reader far below it
+    if (wasExpanded) more.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  });
   apply((new URL(location.href).searchParams.get('type') || 'all').toLowerCase(), false);
 }
 

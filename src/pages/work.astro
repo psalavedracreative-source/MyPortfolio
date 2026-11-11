@@ -2,22 +2,18 @@
 import Base from '../layouts/Base.astro';
 import WorkCard from '../components/WorkCard.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { site, workItems, workTypes, aiVideo, slugify } from '../lib/content';
+import Icon from '../components/Icon.astro';
+import { site, workItems, workTypes, aiVideo, allLimit, filterFor, slugify } from '../lib/content';
 
+// Filter buttons: each work type, with "AI Video" expanded into its content styles (UGC, BGC, …).
+// Buttons with nothing in them are left out.
+const labels = workTypes.flatMap((t) => (t === 'AI Video' ? [...aiVideo.styles.map((s) => s.code), t] : [t]));
 const filters = [
   { label: 'All', value: 'all', count: workItems.length },
-  ...workTypes.map((t) => ({ label: t, value: slugify(t), count: workItems.filter((w) => w.type === t).length })),
+  ...labels.map((l) => ({ label: l, value: slugify(l), count: workItems.filter((w) => filterFor(w) === l).length })).filter((f) => f.count > 0),
 ];
-
-// AI clips are shown in their own area, one section per content style (UGC, BGC, …), in the order of ai_video.styles.
-const isAi = (w: (typeof workItems)[number]) => w.type === 'AI Video';
-const mainItems = workItems.filter((w) => !isAi(w));
-const aiGroups = aiVideo.styles
-  .map((s) => ({ ...s, items: workItems.filter((w) => isAi(w) && w.style === s.code) }))
-  .filter((g) => g.items.length);
-const unsorted = workItems.filter((w) => isAi(w) && !aiVideo.styles.some((s) => s.code === w.style));
-if (unsorted.length) aiGroups.push({ code: 'AI', name: 'More AI video', who: '', example: '', items: unsorted });
-let n = 0;
+const styleInfo = aiVideo.styles.filter((s) => workItems.some((w) => filterFor(w) === s.code));
+const extra = workItems.length - allLimit;
 ---
 <Base
   page="work"
@@ -30,7 +26,7 @@ let n = 0;
     <p class="lead">Reels, carousels, AI video, ads and websites made for brands that want results, not just likes.</p>
   </section>
 
-  <section class="container" aria-label="Work samples" data-work>
+  <section class="container" aria-label="Work samples" data-work data-limit={allLimit}>
     <div class="filters" role="toolbar" aria-label="Filter work">
       {filters.map((f) => (
         <button class="chip" type="button" data-filter={f.value} aria-pressed={f.value === 'all' ? 'true' : 'false'}>
@@ -39,35 +35,30 @@ let n = 0;
       ))}
     </div>
     <p class="sr-only" aria-live="polite" data-filter-status></p>
-    <div class="grid" data-grid data-group>
-      {mainItems.map((item) => <WorkCard item={item} index={n++} />)}
+
+    {styleInfo.map((s) => (
+      <div class="card style-info" data-style-info={slugify(s.code)} hidden>
+        <p class="style-code" aria-hidden="true">{s.code}</p>
+        <div>
+          <h2 class="style-name">{s.name}</h2>
+          <dl class="style-meta">
+            <div><dt>Who creates it</dt><dd>{s.who}</dd></div>
+            <div><dt>Best example</dt><dd>{s.example}</dd></div>
+          </dl>
+          <p class="style-note">{aiVideo.note}</p>
+        </div>
+      </div>
+    ))}
+
+    <div class="grid" id="work-grid" data-grid>
+      {workItems.map((item, i) => <WorkCard item={item} index={i} />)}
     </div>
 
-    {aiGroups.length > 0 && (
-      <div class="ai" data-group="ai-video">
-        <header class="ai-head">
-          <h2 class="h2">{aiVideo.title}</h2>
-          <p class="ai-intro">{aiVideo.intro}</p>
-          <nav class="ai-jump" aria-label="Jump to a content style">
-            {aiGroups.map((g) => <a class="chip" href={`#style-${slugify(g.code)}`}>{g.code}<small>{g.items.length}</small></a>)}
-          </nav>
-        </header>
-
-        {aiGroups.map((g) => (
-          <section class="style" id={`style-${slugify(g.code)}`} aria-labelledby={`style-${slugify(g.code)}-title`} data-group>
-            <div class="style-head">
-              <p class="style-code" aria-hidden="true">{g.code}</p>
-              <div>
-                <h3 class="style-name" id={`style-${slugify(g.code)}-title`}>{g.name} <span class="sr-only">({g.code})</span></h3>
-                {g.who && <p class="style-meta"><span>Who creates it</span>{g.who}</p>}
-                {g.example && <p class="style-meta"><span>Best example</span>{g.example}</p>}
-              </div>
-            </div>
-            <div class="grid" data-grid>
-              {g.items.map((item) => <WorkCard item={item} index={n++} />)}
-            </div>
-          </section>
-        ))}
+    {extra > 0 && (
+      <div class="more">
+        <button class="btn btn-outline" type="button" data-more aria-controls="work-grid" aria-expanded="false" hidden>
+          <span data-more-label>Show more work</span><small data-more-count>+{extra}</small><Icon name="chevron-down" size={18} />
+        </button>
       </div>
     )}
   </section>
@@ -81,25 +72,27 @@ let n = 0;
   .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; margin-top: 32px; align-items: start; }
   .grid[data-masonry] { grid-auto-rows: 4px; row-gap: 0; grid-auto-flow: row dense; }
-  [data-group][hidden] { display: none; }
 
-  .ai { margin-top: clamp(56px, 8vw, 96px); }
-  .ai-head { display: flex; flex-direction: column; gap: 12px; padding-top: clamp(40px, 6vw, 56px); border-top: var(--border); }
-  .ai-intro { color: var(--muted); font-size: 1.0625rem; max-width: 60ch; }
-  .ai-jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
-  .ai-jump .chip { text-decoration: none; }
+  .style-info { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(16px, 3vw, 28px); align-items: start; margin-top: 28px; padding: clamp(18px, 3vw, 26px); border-radius: 22px; }
+  .style-info[hidden] { display: none; }
+  .style-code { font-size: clamp(2.5rem, 6vw, 3.75rem); font-weight: 800; letter-spacing: -0.03em; line-height: .9; color: var(--accent); }
+  .style-name { font-size: clamp(1.25rem, 2.4vw, 1.5rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+  .style-meta { margin-top: 10px; display: grid; gap: 6px; }
+  .style-meta div { display: flex; gap: 10px; }
+  .style-meta dt { flex: 0 0 10.5rem; white-space: nowrap; padding-top: 3px; color: var(--text); font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .style-meta dd { color: var(--muted); font-size: .9375rem; }
+  .style-note { margin-top: 12px; font-size: .875rem; color: var(--muted); font-style: italic; }
 
-  .style { margin-top: clamp(40px, 6vw, 64px); scroll-margin-top: 96px; }
-  .style-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(16px, 3vw, 28px); align-items: start; }
-  .style-code { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.03em; line-height: .9; color: var(--accent); }
-  .style-name { font-size: clamp(1.25rem, 2.4vw, 1.625rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
-  .style-meta { margin-top: 6px; color: var(--muted); font-size: .9375rem; }
-  .style-meta span { display: inline-block; min-width: 9.5em; margin-right: 8px; color: var(--text-2, var(--text)); font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-  .style .grid { margin-top: 24px; }
+  .more { display: flex; justify-content: center; margin-top: 36px; }
+  .more .btn { gap: 10px; }
+  .more small { font-size: .8125rem; font-weight: 700; opacity: .7; }
+  .more [data-more][aria-expanded='true'] :global(svg) { transform: rotate(180deg); }
+  [data-more][hidden] { display: none; }
 
   @media (max-width: 600px) {
-    .style-head { grid-template-columns: 1fr; gap: 8px; }
-    .style-meta span { display: block; min-width: 0; margin: 0 0 2px; }
+    .style-info { grid-template-columns: 1fr; gap: 8px; }
+    .style-meta div { flex-direction: column; gap: 2px; }
+    .style-meta dt { flex: none; }
   }
 </style>
 

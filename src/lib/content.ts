@@ -83,5 +83,8 @@ export const videoFor = (path: unknown): string | undefined =>
 export const workTypes = ['Reels', 'Carousels', 'AI Video', 'Ads', 'Websites'] as const;
 export const workItems = work.items as WorkItem[];
 export type AiStyle = { code: string; name: string; who: string; example: string };
-export const aiVideo = work.ai_video as { title: string; intro: string; styles: AiStyle[] };
+export const aiVideo = work.ai_video as { note: string; styles: AiStyle[] };
+export const allLimit = Number(work.all_limit) > 0 ? Number(work.all_limit) : 8;
+/** The filter a work item belongs to: AI videos go under their content style (UGC, BGC…), everything else under its type. */
+export const filterFor = (w: WorkItem) => (w.type === 'AI Video' && w.style ? w.style : w.type);
 export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

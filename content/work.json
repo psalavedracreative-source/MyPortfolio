@@ -1,5 +1,6 @@
 {
-  "_how_to_add": "Add one object per sample. type = Reels | Carousels | AI Video | Ads | Websites. Media: Reels and AI Video use \"video\"; AI Video also takes \"style\" (UGC | BGC | EGC | IGC | AGC, see ai_video.styles) (+ optional \"poster\"; add \"ratio\": \"16:9\" for landscape clips and \"sound\": false if the clip is silent), Carousels use \"slides\" (a list), Ads/Websites use \"image\" or \"video\"; leave media out to show an empty slot. \"stat\" is optional. Put files in assets/work/... and point to them. featured=true also puts it in the home-page proof cover flow.",
+  "_how_to_add": "Add one object per sample. type = Reels | Carousels | AI Video | Ads | Websites. Media: Reels and AI Video use \"video\"; AI Video also takes \"style\" (UGC | BGC | EGC | IGC | AGC, see ai_video.styles; each style gets its own filter button) (+ optional \"poster\"; add \"ratio\": \"16:9\" for landscape clips and \"sound\": false if the clip is silent), Carousels use \"slides\" (a list), Ads/Websites use \"image\" or \"video\"; leave media out to show an empty slot. \"stat\" is optional. Put files in assets/work/... and point to them. featured=true also puts it in the home-page proof cover flow. all_limit = how many samples the \"All\" view shows before the \"Show more\" button.",
+  "all_limit": 8,
   "items": [
     {
       "id": "reels-no-clients-reel",
@@ -246,8 +247,7 @@
     }
   ],
   "ai_video": {
-    "title": "AI video, sorted by content type",
-    "intro": "Every clip in this section was made with generative AI, styled the way each type of content looks in the wild.",
+    "note": "Made with generative AI, styled the way this type of content looks in the wild.",
     "styles": [
       {
         "code": "UGC",

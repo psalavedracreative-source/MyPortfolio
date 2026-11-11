@@ -1,14 +1,14 @@
 ---
 import { Picture, getImage } from 'astro:assets';
 import Icon from './Icon.astro';
-import { imageFor, videoFor, slugify, type WorkItem } from '../lib/content';
+import { imageFor, videoFor, slugify, filterFor, type WorkItem } from '../lib/content';
 
 interface Props { item: WorkItem; index: number }
 const { item, index } = Astro.props;
 
 const tagFor: Record<string, string> = { Reels: 'Reel', Carousels: 'Carousel', 'AI Video': 'AI video', Ads: 'Ad', Websites: 'Website' };
 const tag = item.type === 'AI Video' && item.style ? `AI · ${item.style}` : tagFor[item.type] ?? item.type;
-const type = slugify(item.type);
+const type = slugify(filterFor(item));
 
 const video = videoFor(item.video);
 const posterImg = imageFor(item.poster);
