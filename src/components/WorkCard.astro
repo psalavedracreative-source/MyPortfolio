@@ -1,0 +1,122 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import { imageFor, videoFor, slugify, type WorkItem } from '../lib/content';
+
+interface Props { item: WorkItem; index: number }
+const { item, index } = Astro.props;
+
+const tagFor: Record<string, string> = { Reels: 'Reel', Carousels: 'Carousel', Ads: 'Ad', Websites: 'Website' };
+const tag = tagFor[item.type] ?? item.type;
+const type = slugify(item.type);
+
+const video = videoFor(item.video);
+const posterImg = imageFor(item.poster);
+const poster = posterImg ? (await getImage({ src: posterImg, width: 640, format: 'webp', quality: 72 })).src : undefined;
+const slides = (item.slides ?? []).map((s) => imageFor(s)).filter((s): s is NonNullable<typeof s> => !!s);
+const image = imageFor(item.image);
+
+const kind = item.type === 'Reels' && video ? 'reel'
+  : slides.length ? 'carousel'
+  : video ? 'video'
+  : image ? 'image'
+  : 'empty';
+const ratio = kind === 'reel' || (kind === 'video' && item.type === 'Reels') ? '9 / 16' : '4 / 5';
+const pictureProps = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 340px', formats: ['avif', 'webp'] as const };
+---
+<article class="card tile" data-type={type} data-kind={kind}>
+  <div class="media" style={`aspect-ratio:${ratio}`}>
+    {kind === 'reel' && (
+      <>
+        <video src={video} poster={poster} muted loop playsinline preload="metadata" aria-label={item.title} data-reel></video>
+        <button class="sound" type="button" data-sound aria-pressed="false" aria-label="Turn sound on">
+          <span class="ico-off"><Icon name="sound-off" size={18} /></span><span class="ico-on"><Icon name="sound-on" size={18} /></span>
+        </button>
+        <span class="badge autoplay"><span class="rec" aria-hidden="true"></span>Autoplay</span>
+      </>
+    )}
+
+    {kind === 'video' && (
+      <video src={video} poster={poster} muted loop playsinline preload="metadata" aria-label={item.title} data-reel></video>
+    )}
+
+    {kind === 'carousel' && (
+      <div class="carousel" data-carousel data-index={index} role="group" aria-roledescription="carousel" aria-label={item.title}>
+        <div class="track" data-track>
+          {slides.map((s, i) => (
+            <div class="slide" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${slides.length}`}>
+              <Picture src={s} alt={`${item.title}, slide ${i + 1}`} {...pictureProps} loading="lazy" decoding="async" />
+            </div>
+          ))}
+        </div>
+        <span class="badge counter" data-counter aria-hidden="true">1 / {slides.length}</span>
+        <div class="arrows">
+          <button class="arrow" type="button" data-prev aria-label="Previous slide"><Icon name="chevron-left" size={18} /></button>
+          <button class="arrow" type="button" data-next aria-label="Next slide"><Icon name="chevron-right" size={18} /></button>
+        </div>
+        <div class="cdots" aria-hidden="true">{slides.map(() => <span class="cdot"></span>)}</div>
+      </div>
+    )}
+
+    {kind === 'image' && image && (
+      <Picture src={image} alt={item.title} {...pictureProps} loading="lazy" decoding="async" class="fill" />
+    )}
+
+    {kind === 'empty' && (
+      <div class="slot empty-slot">
+        <Icon name="plus" />
+        <span class="slot-title">{item.title}</span>
+        <span>Drop your file in this slot</span>
+      </div>
+    )}
+
+    <span class="badge tag">{tag}</span>
+  </div>
+  <div class="meta">
+    <div>
+      <h2 class="title">{item.title}</h2>
+      <p class="client">{item.client}</p>
+    </div>
+    <p class="stat">{item.stat}</p>
+  </div>
+</article>
+
+<style>
+  .tile { overflow: hidden; border-radius: 22px; transition: transform .25s ease, border-color .25s ease; }
+  .tile:hover { transform: translateY(-4px); border-color: var(--line-2); }
+  .tile[hidden] { display: none; }
+  .media { position: relative; background: var(--bg); overflow: hidden; }
+  .media video, .fill, .fill :global(img), .slide :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .media video { position: absolute; inset: 0; }
+  .fill { position: absolute; inset: 0; }
+
+  .badge { position: absolute; z-index: 2; background: rgba(14, 15, 19, .72); color: var(--text); font-size: .75rem; font-weight: 700; padding: 6px 10px; border-radius: 999px; backdrop-filter: blur(6px); }
+  .tag { top: 12px; left: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .autoplay { bottom: 12px; right: 12px; display: inline-flex; align-items: center; gap: 6px; }
+  .rec { width: 7px; height: 7px; border-radius: 50%; background: #ff4d5e; }
+  .counter { top: 12px; right: 12px; }
+
+  .sound { position: absolute; z-index: 2; bottom: 10px; left: 10px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(14, 15, 19, .72); color: var(--text); display: grid; place-items: center; cursor: pointer; }
+  .sound .ico-on, .sound[aria-pressed='true'] .ico-off { display: none; }
+  .sound[aria-pressed='true'] .ico-on { display: block; color: var(--accent); }
+
+  .carousel { position: absolute; inset: 0; }
+  .track { display: flex; height: 100%; transition: transform .7s var(--ease); }
+  .slide { flex: 0 0 100%; height: 100%; }
+  .arrows { position: absolute; z-index: 2; top: 50%; left: 10px; right: 10px; margin-top: -22px; display: flex; justify-content: space-between; pointer-events: none; }
+  .arrow { pointer-events: auto; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(14, 15, 19, .72); color: var(--text); display: grid; place-items: center; cursor: pointer; opacity: .85; transition: opacity .2s, background .2s; }
+  .arrow:hover { opacity: 1; background: rgba(14, 15, 19, .9); }
+  .cdots { position: absolute; z-index: 2; left: 0; right: 0; bottom: 14px; display: flex; justify-content: center; gap: 6px; }
+  .cdot { width: 7px; height: 7px; border-radius: 99px; background: rgba(244, 244, 240, .45); transition: width .3s, background .3s; }
+  .cdot[data-on] { width: 20px; background: var(--accent); }
+
+  .empty-slot { position: absolute; inset: 14px; }
+  .slot-title { color: var(--text-2); font-size: .9375rem; font-weight: 700; }
+
+  .meta { padding: 16px 18px 18px; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+  .title { font-size: 1.0625rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; }
+  .client { margin-top: 4px; font-size: .875rem; color: var(--muted); }
+  .stat { font-size: .9375rem; font-weight: 800; color: var(--accent); white-space: nowrap; }
+
+  @media (prefers-reduced-motion: reduce) { .track { transition: none; } }
+</style>

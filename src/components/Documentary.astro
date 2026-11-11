@@ -1,0 +1,89 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { about, imageFor } from '../lib/content';
+const chapters = about.documentary.map((c) => ({ ...c, img: imageFor(c.photo) }));
+const SECONDS = 5;
+---
+<section class="container doc-wrap" aria-label="My story, as a short documentary" data-doc data-seconds={SECONDS}>
+  <div class="film">
+    {chapters.map((c, i) => (
+      <div class="slide" data-slide={i} aria-hidden={i === 0 ? 'false' : 'true'} data-on={i === 0 ? '' : undefined}>
+        {c.img
+          ? <Picture src={c.img} alt={c.alt} widths={[640, 1024, 1600, 2000]} sizes="(max-width: 1240px) 100vw, 1200px" formats={['avif', 'webp']} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+          : <div class="slot doc-slot"><Icon name="image" />{c.photo}</div>}
+      </div>
+    ))}
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="bar top" aria-hidden="true"></div>
+    <div class="bar bottom" aria-hidden="true"></div>
+
+    <div class="segs" aria-hidden="true">
+      {chapters.map((_, i) => <span class="seg" data-seg={i}><i style={`animation-duration:${SECONDS}s`}></i></span>)}
+    </div>
+
+    <div class="subs" aria-live="polite">
+      {chapters.map((c, i) => (
+        <div class="sub" data-sub={i} aria-hidden={i === 0 ? 'false' : 'true'} data-on={i === 0 ? '' : undefined}>
+          <p class="sub-ch">{c.chapter} · {c.year}</p>
+          <p class="sub-cap">{c.caption}</p>
+        </div>
+      ))}
+    </div>
+
+    <button class="ctl" type="button" data-toggle aria-label="Pause the story">
+      <span class="i-pause"><Icon name="pause" size={18} /></span><span class="i-play"><Icon name="play" size={18} /></span>
+    </button>
+  </div>
+</section>
+
+<style>
+  .doc-wrap { margin-top: clamp(40px, 6vw, 56px); }
+  .film { position: relative; width: 100%; aspect-ratio: 21 / 9; border-radius: var(--r-lg); overflow: hidden; background: #000; border: var(--border); }
+  .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease; }
+  .slide[data-on] { opacity: 1; }
+  .slide :global(picture), .slide :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .slide :global(img) { object-position: 50% 30%; }
+  .slide[data-on] :global(img) { animation: kb 7s ease-out forwards; }
+  [data-doc][data-paused] .slide[data-on] :global(img) { animation-play-state: paused; }
+  @keyframes kb { 0% { transform: scale(1.04) translate(0, 0) } 100% { transform: scale(1.16) translate(-2%, -2%) } }
+  .doc-slot { position: absolute; inset: 14% 6%; }
+
+  .vignette { position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 160px 40px rgba(0, 0, 0, .65); }
+  .bar { position: absolute; left: 0; right: 0; height: 9%; background: #000; }
+  .bar.top { top: 0; }
+  .bar.bottom { bottom: 0; }
+
+  .segs { position: absolute; top: 12%; left: 4%; right: 4%; display: flex; gap: 8px; }
+  .seg { flex: 1; height: 4px; background: rgba(244, 244, 240, .25); border-radius: 2px; overflow: hidden; }
+  .seg i { display: block; height: 100%; width: 0; background: var(--accent); }
+  .seg[data-state='done'] i { width: 100%; }
+  .seg[data-state='on'] i { animation-name: fill; animation-timing-function: linear; animation-fill-mode: forwards; }
+  [data-doc][data-paused] .seg i { animation-play-state: paused; }
+  @keyframes fill { to { width: 100% } }
+
+  .subs { position: absolute; left: 6%; right: 6%; bottom: 14%; height: 100px; }
+  .sub { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; text-align: center; opacity: 0; transition: opacity .6s ease; }
+  .sub[data-on] { opacity: 1; }
+  .sub-ch { font-size: .8125rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  .sub-cap { font-size: clamp(1.125rem, 2.6vw, 1.875rem); font-weight: 600; color: #fff; text-shadow: 0 2px 12px rgba(0, 0, 0, .8); line-height: 1.25; text-wrap: balance; }
+
+  .ctl { position: absolute; right: 3%; bottom: 13%; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(14, 15, 19, .72); color: var(--text); display: grid; place-items: center; cursor: pointer; }
+  .ctl .i-play, [data-doc][data-paused] .ctl .i-pause { display: none; }
+  [data-doc][data-paused] .ctl .i-play { display: block; }
+
+  @media (max-width: 760px) {
+    .film { aspect-ratio: 4 / 5; }
+    .subs { bottom: 13%; height: 120px; right: 16%; left: 6%; }
+    .sub { align-items: flex-start; text-align: left; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slide[data-on] :global(img) { animation: none; }
+    .slide, .sub { transition: none; }
+  }
+</style>
+
+<script>
+  import { initDocumentary } from '../scripts/documentary';
+  document.querySelectorAll<HTMLElement>('[data-doc]').forEach(initDocumentary);
+</script>

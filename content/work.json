@@ -1,5 +1,5 @@
 {
-  "_how_to_add": "Add one object per sample. type = Reels | Carousels | Ads | Websites. Put media in assets/work/... and point to it. featured=true puts it in the home-page proof cover flow.",
+  "_how_to_add": "Add one object per sample. type = Reels | Carousels | Ads | Websites. Media: Reels use \"video\" (+ optional \"poster\"), Carousels use \"slides\" (a list), Ads/Websites use \"image\" or \"video\"; leave media out to show an empty slot. Put files in assets/work/... and point to them. featured=true also puts it in the home-page proof cover flow.",
   "items": [
     {
       "id": "reels-no-clients-reel",
@@ -52,13 +52,81 @@
       ],
       "stat": "[X] saves",
       "featured": false
+    },
+    {
+      "id": "website-landing-page",
+      "type": "Websites",
+      "title": "Personal landing page",
+      "client": "Patrick Brand Growth",
+      "image": "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_02.png",
+      "stat": "In progress",
+      "featured": false
+    },
+    {
+      "id": "ad-slot-1",
+      "type": "Ads",
+      "title": "[Your ad creative]",
+      "client": "[Client]",
+      "stat": "[X] leads",
+      "featured": false
+    },
+    {
+      "id": "ad-slot-2",
+      "type": "Ads",
+      "title": "[Your ad creative]",
+      "client": "[Client]",
+      "stat": "[X] ROAS",
+      "featured": false
+    },
+    {
+      "id": "website-slot-1",
+      "type": "Websites",
+      "title": "[Client website]",
+      "client": "[Client]",
+      "stat": "[Result]",
+      "featured": false
     }
   ],
   "proof_coverflow": [
-    { "tag": "Reels", "client": "[Client name]", "cover": "[cover image]", "stat": "2.4M+", "unit": "views", "line": "Engineered to stop the scroll." },
-    { "tag": "Carousels", "client": "[Client name]", "cover": "[cover image]", "stat": "[X]K+", "unit": "saves", "line": "Content people come back to." },
-    { "tag": "Meta ads", "client": "[Client name]", "cover": "[cover image]", "stat": "[X]x", "unit": "return on ad spend", "line": "Every peso working harder." },
-    { "tag": "Short-form video", "client": "[Client name]", "cover": "[cover image]", "stat": "[X]K+", "unit": "new followers", "line": "An audience, not just a feed." },
-    { "tag": "UGC / AIGC", "client": "[Client name]", "cover": "[cover image]", "stat": "[X]+", "unit": "leads in the DMs", "line": "Views that turned into sales." }
+    {
+      "tag": "Reels",
+      "client": "[Client name]",
+      "cover": "[cover image]",
+      "stat": "2.4M+",
+      "unit": "views",
+      "line": "Engineered to stop the scroll."
+    },
+    {
+      "tag": "Carousels",
+      "client": "[Client name]",
+      "cover": "[cover image]",
+      "stat": "[X]K+",
+      "unit": "saves",
+      "line": "Content people come back to."
+    },
+    {
+      "tag": "Meta ads",
+      "client": "[Client name]",
+      "cover": "[cover image]",
+      "stat": "[X]x",
+      "unit": "return on ad spend",
+      "line": "Every peso working harder."
+    },
+    {
+      "tag": "Short-form video",
+      "client": "[Client name]",
+      "cover": "[cover image]",
+      "stat": "[X]K+",
+      "unit": "new followers",
+      "line": "An audience, not just a feed."
+    },
+    {
+      "tag": "UGC / AIGC",
+      "client": "[Client name]",
+      "cover": "[cover image]",
+      "stat": "[X]+",
+      "unit": "leads in the DMs",
+      "line": "Views that turned into sales."
+    }
   ]
 }

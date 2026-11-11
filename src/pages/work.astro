@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkCard from '../components/WorkCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site, workItems, workTypes, slugify } from '../lib/content';
+
+const filters = [
+  { label: 'All', value: 'all', count: workItems.length },
+  ...workTypes.map((t) => ({ label: t, value: slugify(t), count: workItems.filter((w) => w.type === t).length })),
+];
+---
+<Base
+  page="work"
+  title={`Work | ${site.brand}`}
+  description="Reels, carousels, ads and websites made for brands that want results, not just likes."
+>
+  <section class="container work-head">
+    <p class="kicker">Selected work</p>
+    <h1 class="h1">Work that <span class="lime">moves</span> people.</h1>
+    <p class="lead">Reels, carousels, ads and websites made for brands that want results, not just likes.</p>
+  </section>
+
+  <section class="container" aria-label="Work samples" data-work>
+    <div class="filters" role="toolbar" aria-label="Filter work">
+      {filters.map((f) => (
+        <button class="chip" type="button" data-filter={f.value} aria-pressed={f.value === 'all' ? 'true' : 'false'}>
+          {f.label}<small>{f.count}</small>
+        </button>
+      ))}
+    </div>
+    <p class="sr-only" aria-live="polite" data-filter-status></p>
+    <div class="grid">
+      {workItems.map((item, i) => <WorkCard item={item} index={i} />)}
+    </div>
+  </section>
+
+  <CtaBand title="Want results like these?" />
+</Base>
+
+<style>
+  .work-head { display: flex; flex-direction: column; gap: 16px; padding-top: clamp(48px, 8vw, 88px); }
+  .work-head .h1 { max-width: 14ch; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; margin-top: 32px; align-items: start; }
+</style>
+
+<script>
+  import { initWork } from '../scripts/work';
+  const root = document.querySelector<HTMLElement>('[data-work]');
+  if (root) initWork(root);
+</script>

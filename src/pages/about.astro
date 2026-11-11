@@ -1,0 +1,161 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Documentary from '../components/Documentary.astro';
+import Lightbox from '../components/Lightbox.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import { about, site, imageFor } from '../lib/content';
+
+const heroImg = imageFor(about.hero_photo);
+const [hiBefore] = about.headline.split('Patrick');
+const chapters = about.documentary.map((c) => ({ ...c, img: imageFor(c.photo) }));
+
+const full = async (src: ReturnType<typeof imageFor>) =>
+  src ? (await getImage({ src, width: 1600, format: 'webp', quality: 82 })).src : undefined;
+const certs = await Promise.all(about.certificates.map(async (c) => {
+  const img = imageFor(c.photo);
+  return { ...c, img, full: await full(img) };
+}));
+const gallery = await Promise.all(about.gallery.map(async (g) => {
+  const img = imageFor(g.photo);
+  return { ...g, img, full: await full(img) };
+}));
+const thumb = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 380px', formats: ['avif', 'webp'] as const };
+---
+<Base
+  page="about"
+  title={`About | ${site.brand}`}
+  description={about.bio}
+>
+  <!-- Intro -->
+  <section class="container intro">
+    {heroImg && (
+      <div class="intro-photo">
+        <Picture src={heroImg} alt="Patrick Salavedra in a black t-shirt in front of a lime backdrop" widths={[360, 640, 900]} sizes="(max-width: 760px) 100vw, 380px" formats={['avif', 'webp']} loading="eager" fetchpriority="high" />
+      </div>
+    )}
+    <div class="intro-copy">
+      <p class="kicker">About me</p>
+      <h1 class="h1">
+        {about.headline.includes('Patrick') ? <>{hiBefore}<span class="lime">Patrick.</span></> : about.headline}
+      </h1>
+      <p class="lead">{about.bio}</p>
+      <ul class="stats">
+        {about.stats.map((s) => (
+          <li class="card stat"><p class="stat-v">{s.value}</p><p class="stat-l">{s.label}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Documentary />
+
+  <!-- Story -->
+  <section class="container section" aria-labelledby="story-title">
+    <h2 class="h2" id="story-title">The story <span class="lime">so far.</span></h2>
+    <ol class="story">
+      {chapters.map((c, i) => (
+        <li class:list={['card chapter', { flip: i % 2 === 1 }]}>
+          <div class="chapter-photo">
+            {c.img
+              ? <Picture src={c.img} alt={c.alt} {...thumb} sizes="(max-width: 760px) 100vw, 560px" loading="lazy" decoding="async" />
+              : <div class="slot"><Icon name="image" />{c.photo}</div>}
+          </div>
+          <div class="chapter-copy">
+            <p class="ch-label">{c.chapter} · {c.year}</p>
+            <h3 class="ch-title">{c.title}</h3>
+            <p class="ch-text">{c.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Certificates -->
+  <section class="container section" aria-labelledby="certs-title">
+    <h2 class="h2" id="certs-title">Certificates</h2>
+    <ul class="certs">
+      {certs.map((c) => (
+        <li class="card cert">
+          {c.img
+            ? <button class="cert-photo" type="button" data-lightbox-item="certs" data-full={c.full} data-alt={`${c.name}, ${c.issuer}`} data-caption={`${c.name} · ${c.issuer} · ${c.year}`} aria-label={`View certificate: ${c.name}`}>
+                <Picture src={c.img} alt="" {...thumb} loading="lazy" />
+              </button>
+            : <div class="slot cert-slot"><Icon name="award" />Certificate photo<span class="slot-path">{c.photo}</span></div>}
+          <div class="cert-meta">
+            <h3>{c.name}</h3>
+            <p>{c.issuer} · {c.year}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Gallery -->
+  <section class="container section" aria-labelledby="bts-title">
+    <h2 class="h2" id="bts-title">Behind the scenes</h2>
+    <ul class="gallery">
+      {gallery.map((g) => (
+        <li>
+          {g.img
+            ? <button class="g-item" type="button" data-lightbox-item="gallery" data-full={g.full} data-alt={g.caption} data-caption={g.caption} aria-label={`View photo: ${g.caption}`}>
+                <Picture src={g.img} alt="" {...thumb} loading="lazy" />
+                <span class="g-cap">{g.caption}</span>
+              </button>
+            : <div class="slot g-slot"><Icon name="image" />{g.caption}<span class="slot-path">{g.photo}</span></div>}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <CtaBand title="Let's write your brand's next" accent="chapter." />
+  <Lightbox />
+</Base>
+
+<style>
+  .intro { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: clamp(28px, 5vw, 56px); align-items: center; padding-top: clamp(40px, 7vw, 80px); }
+  .intro-photo { border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 4 / 5; background: var(--surface); border: var(--border); }
+  .intro-photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .intro-copy { display: flex; flex-direction: column; gap: 16px; }
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+  .stat { padding: 18px; border-radius: 18px; }
+  .stat-v { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: var(--accent); letter-spacing: -0.02em; line-height: 1.1; }
+  .stat-l { margin-top: 4px; font-size: .875rem; color: var(--muted); font-weight: 600; }
+
+  .story { display: flex; flex-direction: column; gap: 24px; margin-top: 36px; }
+  .chapter { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 40px); align-items: center; padding: 20px; border-radius: 26px; }
+  .chapter.flip .chapter-photo { order: 2; }
+  .chapter-photo { border-radius: 18px; overflow: hidden; aspect-ratio: 16 / 10; position: relative; }
+  .chapter-photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transition: transform .8s ease; }
+  .chapter:hover .chapter-photo :global(img) { transform: scale(1.04); }
+  .chapter-photo .slot { position: absolute; inset: 0; }
+  .chapter-copy { display: flex; flex-direction: column; gap: 10px; padding: 6px 10px; }
+  .ch-label { font-size: .8125rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+  .ch-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+  .ch-text { color: var(--muted); font-size: 1.0625rem; }
+
+  .certs { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 28px; }
+  .cert { padding: 14px; border-radius: 22px; }
+  .cert-photo, .cert-slot { aspect-ratio: 4 / 3; width: 100%; }
+  .cert-photo { display: block; padding: 0; border: 0; border-radius: var(--r-sm); overflow: hidden; cursor: zoom-in; background: var(--bg); }
+  .cert-photo :global(img), .g-item :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+  .cert-photo:hover :global(img), .g-item:hover :global(img) { transform: scale(1.04); }
+  .cert-meta { padding: 14px 4px 4px; }
+  .cert-meta h3 { font-size: 1.0625rem; font-weight: 700; }
+  .cert-meta p { margin-top: 4px; font-size: .875rem; color: var(--muted); }
+  .slot-path { font-size: .75rem; font-weight: 500; opacity: .75; word-break: break-all; }
+
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 28px; }
+  .g-item { position: relative; display: block; width: 100%; aspect-ratio: 1; padding: 0; border: var(--border); border-radius: 18px; overflow: hidden; cursor: zoom-in; background: var(--surface); }
+  .g-cap { position: absolute; left: 10px; bottom: 10px; background: rgba(14, 15, 19, .75); color: var(--text); font-size: .8125rem; font-weight: 600; padding: 6px 10px; border-radius: 999px; }
+  .g-slot { aspect-ratio: 1; border-radius: 18px; }
+
+  @media (max-width: 760px) {
+    .intro { grid-template-columns: 1fr; }
+    .intro-photo { max-width: 420px; }
+    .chapter { grid-template-columns: 1fr; padding: 14px; }
+    .chapter.flip .chapter-photo { order: 0; }
+  }
+  @media (max-width: 420px) { .stats { gap: 8px; } .stat { padding: 14px 12px; } }
+</style>
