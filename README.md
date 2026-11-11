@@ -81,7 +81,7 @@ Put photos in `assets/photos/` (certificates in `assets/photos/certificates/`, g
 
 ### Client logos
 
-Put SVG or PNG logos in `assets/logos/` and set `logo` in `client_logos` in `content/site.json`. They show in greyscale and turn full color on hover.
+Put SVG or PNG logos (transparent background) in `assets/logos/` and add `{ "name": "...", "logo": "assets/logos/....png" }` to `client_logos` in `content/site.json`. They drift sideways in a loop under "Brands I've worked with", each with its name underneath, and pause when hovered. Leave `logo` empty to show a round badge with the brand's initials instead (used for BikeAddict until it has its own logo).
 
 ### Teach the assistant a new answer
 
@@ -149,7 +149,7 @@ In the editor you can change the work library and cover flow, the About page (do
 **content/site.json**
 - `cta_primary.url`: `[GOOGLE_CALENDAR_BOOKING_LINK]`
 - `links.email`: `[YOUR_PUBLIC_EMAIL]`
-- `client_logos`: `[Client 1]` … `[Client 5]` names and logo files (`assets/logos/[client-1].svg` …)
+- `client_logos`: BikeAddict has no logo file yet (shows a "BA" badge)
 - `testimonials[0]`: `[Short client testimonial]`, `[Client name]`, `[Brand]`
 - `form_endpoint`: `[FORM_ENDPOINT_URL e.g. Formspree or Web3Forms]`
 
@@ -180,5 +180,5 @@ In the editor you can change the work library and cover flow, the About page (do
 
 - Lighthouse (mobile): Home and Work score 100 in performance, accessibility, best practices and SEO; About scores 99 performance and 100 in the rest.
 - Checked at 375, 768, 1280 and 1440 px wide.
-- `prefers-reduced-motion` turns off the reaction bubbles, cover-flow and carousel animation, reel autoplay and the documentary's Ken Burns zoom.
+- `prefers-reduced-motion` turns off the reaction bubbles, the drifting brand logos (they show as a still grid), cover-flow and carousel animation, reel autoplay and the documentary's Ken Burns zoom.
 - `sitemap-index.xml` is generated on every build; each page has its own title, description and Open Graph image (`lime-portrait.png`).

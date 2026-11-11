@@ -26,11 +26,16 @@
     { "step": "Launch", "text": "Pay the other 50% once you're happy." }
   ],
   "client_logos": [
-    { "name": "[Client 1]", "logo": "assets/logos/[client-1].svg" },
-    { "name": "[Client 2]", "logo": "assets/logos/[client-2].svg" },
-    { "name": "[Client 3]", "logo": "assets/logos/[client-3].svg" },
-    { "name": "[Client 4]", "logo": "assets/logos/[client-4].svg" },
-    { "name": "[Client 5]", "logo": "assets/logos/[client-5].svg" }
+    { "name": "GamerCounsel", "logo": "assets/logos/gamercounsel.png" },
+    { "name": "Minds Support Network", "logo": "assets/logos/minds-support-network.png" },
+    { "name": "BikeAddict", "logo": "" },
+    { "name": "Illinois Field Guide", "logo": "assets/logos/illinois-field-guide.png" },
+    { "name": "Hey Chicago", "logo": "assets/logos/hey-chicago.png" },
+    { "name": "Roam Tail", "logo": "assets/logos/roam-tail.png" },
+    { "name": "Its Philippines", "logo": "assets/logos/its-philippines.png" },
+    { "name": "Wonder in Seconds", "logo": "assets/logos/wonder-in-seconds.png" },
+    { "name": "Banwani", "logo": "assets/logos/banwani.png" },
+    { "name": "PH Exam Reviewer", "logo": "assets/logos/ph-exam-reviewer.png" }
   ],
   "testimonials": [
     { "quote": "[Short client testimonial]", "name": "[Client name]", "brand": "[Brand]" }
