@@ -3,6 +3,7 @@ const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matche
 
 export function initWork(root: HTMLElement) {
   initFilters(root);
+  initMasonry(root);
   root.querySelectorAll<HTMLVideoElement>('video[data-reel]').forEach(initReel);
   root.querySelectorAll<HTMLElement>('[data-carousel]').forEach((el) => initCarousel(el, Number(el.dataset.index) || 0));
 }
@@ -36,6 +37,24 @@ function initFilters(root: HTMLElement) {
   apply((new URL(location.href).searchParams.get('type') || 'all').toLowerCase(), false);
 }
 
+// ---------- masonry: tiles of different shapes (9:16, 16:9, 4:5) pack without gaps ----------
+function initMasonry(root: HTMLElement) {
+  const grid = root.querySelector<HTMLElement>('[data-grid]');
+  if (!grid) return;
+  const ROW = 4;
+  const layout = () => {
+    const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+    grid.querySelectorAll<HTMLElement>('.tile').forEach((t) => {
+      if (t.hidden) return;
+      t.style.gridRowEnd = `span ${Math.ceil((t.getBoundingClientRect().height + gap) / ROW)}`;
+    });
+  };
+  grid.dataset.masonry = '';
+  const ro = new ResizeObserver(() => requestAnimationFrame(layout));
+  grid.querySelectorAll('.tile').forEach((t) => ro.observe(t));
+  layout();
+}
+
 // ---------- reels: play in view, pause out of view, tap toggles sound ----------
 function initReel(video: HTMLVideoElement) {
   const tile = video.closest('.tile')!;
@@ -57,8 +76,10 @@ function initReel(video: HTMLVideoElement) {
     sound?.setAttribute('aria-pressed', String(!video.muted));
     sound?.setAttribute('aria-label', video.muted ? 'Turn sound on' : 'Turn sound off');
   };
-  sound?.addEventListener('click', toggleSound);
-  video.addEventListener('click', toggleSound);
+  if (sound) {
+    sound.addEventListener('click', toggleSound);
+    video.addEventListener('click', toggleSound);
+  }
 }
 
 // ---------- carousels: auto-advance every 5s, staggered, pause on hover/focus/off-screen ----------

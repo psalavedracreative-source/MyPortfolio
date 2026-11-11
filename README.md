@@ -54,7 +54,7 @@ You can edit the JSON files directly (then commit and push), or use the editor a
 ```jsonc
 {
   "id": "acme-launch-reel",            // unique, no spaces
-  "type": "Reels",                     // Reels | Carousels | Ads | Websites
+  "type": "Reels",                     // Reels | Carousels | AI Video | Ads | Websites
   "title": "Product launch reel",
   "client": "Acme Coffee",
   "video": "assets/work/reels/acme-launch.mp4",   // Reels (9:16 MP4)
@@ -65,7 +65,9 @@ You can edit the JSON files directly (then commit and push), or use the editor a
 ```
 
 - **Carousels:** use `"slides": ["assets/work/carousels/acme/01.png", "..."]` (1080×1350).
+- **AI Video:** same as Reels (`"video"` + `"poster"`). Add `"ratio": "16:9"` for landscape clips (they take two columns on wider screens) and `"sound": false` for a silent clip (hides the sound button). The 11 AI clips live in `assets/work/ai-video/`, grouped by niche in the `client` line (Beauty, Fashion, Food & drink, Automotive, Real estate…).
 - **Ads / Websites:** use `"image": "assets/..."` (or `"video"` for a video ad). Leave the media out to show an empty slot.
+- `"stat"` is optional; leave it out when there's no real number to show.
 - The filter chips and their counts update by themselves. Filters are shareable: `/work?type=reels`.
 
 ### Home-page proof cover flow

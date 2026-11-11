@@ -1,5 +1,5 @@
 {
-  "_how_to_add": "Add one object per sample. type = Reels | Carousels | Ads | Websites. Media: Reels use \"video\" (+ optional \"poster\"), Carousels use \"slides\" (a list), Ads/Websites use \"image\" or \"video\"; leave media out to show an empty slot. Put files in assets/work/... and point to them. featured=true also puts it in the home-page proof cover flow.",
+  "_how_to_add": "Add one object per sample. type = Reels | Carousels | AI Video | Ads | Websites. Media: Reels and AI Video use \"video\" (+ optional \"poster\"; add \"ratio\": \"16:9\" for landscape clips and \"sound\": false if the clip is silent), Carousels use \"slides\" (a list), Ads/Websites use \"image\" or \"video\"; leave media out to show an empty slot. \"stat\" is optional. Put files in assets/work/... and point to them. featured=true also puts it in the home-page proof cover flow.",
   "items": [
     {
       "id": "reels-no-clients-reel",
@@ -51,6 +51,111 @@
         "assets/work/carousels/web-sneak-peek-v2/web-sneak-peek-v2_06.png"
       ],
       "stat": "[X] saves",
+      "featured": false
+    },
+    {
+      "id": "ai-lumiere-serum",
+      "type": "AI Video",
+      "title": "Lumière serum",
+      "client": "Beauty · AI concept",
+      "video": "assets/work/ai-video/lumiere-serum.mp4",
+      "poster": "assets/work/ai-video/posters/lumiere-serum.jpg",
+      "featured": false
+    },
+    {
+      "id": "ai-skintific-toner",
+      "type": "AI Video",
+      "title": "Skintific toner",
+      "client": "Beauty · AI concept",
+      "video": "assets/work/ai-video/skintific-toner.mp4",
+      "poster": "assets/work/ai-video/posters/skintific-toner.jpg",
+      "ratio": "16:9",
+      "featured": false
+    },
+    {
+      "id": "ai-old-spice",
+      "type": "AI Video",
+      "title": "Old Spice deodorant",
+      "client": "Personal care · AI concept",
+      "video": "assets/work/ai-video/old-spice.mp4",
+      "poster": "assets/work/ai-video/posters/old-spice.jpg",
+      "featured": false
+    },
+    {
+      "id": "ai-anastasia-lip",
+      "type": "AI Video",
+      "title": "Anastasia Beverly Hills lip",
+      "client": "Beauty · AI concept",
+      "video": "assets/work/ai-video/anastasia-lip.mp4",
+      "poster": "assets/work/ai-video/posters/anastasia-lip.jpg",
+      "ratio": "16:9",
+      "featured": false
+    },
+    {
+      "id": "ai-ai-model-lookbook",
+      "type": "AI Video",
+      "title": "AI model lookbook",
+      "client": "Fashion · AI concept",
+      "video": "assets/work/ai-video/ai-model-lookbook.mp4",
+      "poster": "assets/work/ai-video/posters/ai-model-lookbook.jpg",
+      "featured": false
+    },
+    {
+      "id": "ai-skincare-routine",
+      "type": "AI Video",
+      "title": "Clean skincare routine",
+      "client": "Beauty · AI concept",
+      "video": "assets/work/ai-video/skincare-routine.mp4",
+      "poster": "assets/work/ai-video/posters/skincare-routine.jpg",
+      "ratio": "16:9",
+      "featured": false
+    },
+    {
+      "id": "ai-ube-drink-promo",
+      "type": "AI Video",
+      "title": "Ube drink promo",
+      "client": "Food & drink · AI concept",
+      "video": "assets/work/ai-video/ube-drink-promo.mp4",
+      "poster": "assets/work/ai-video/posters/ube-drink-promo.jpg",
+      "featured": false
+    },
+    {
+      "id": "ai-sandwich-commercial",
+      "type": "AI Video",
+      "title": "Sandwich food commercial",
+      "client": "Food & drink · AI concept",
+      "video": "assets/work/ai-video/sandwich-commercial.mp4",
+      "poster": "assets/work/ai-video/posters/sandwich-commercial.jpg",
+      "ratio": "16:9",
+      "sound": false,
+      "featured": false
+    },
+    {
+      "id": "ai-yamaha-motorcycle",
+      "type": "AI Video",
+      "title": "Yamaha motorcycle",
+      "client": "Automotive · AI concept",
+      "video": "assets/work/ai-video/yamaha-motorcycle.mp4",
+      "poster": "assets/work/ai-video/posters/yamaha-motorcycle.jpg",
+      "featured": false
+    },
+    {
+      "id": "ai-virtual-staging",
+      "type": "AI Video",
+      "title": "Real estate virtual staging",
+      "client": "Real estate · AI concept",
+      "video": "assets/work/ai-video/virtual-staging.mp4",
+      "poster": "assets/work/ai-video/posters/virtual-staging.jpg",
+      "ratio": "16:9",
+      "featured": false
+    },
+    {
+      "id": "ai-architectural-visualization",
+      "type": "AI Video",
+      "title": "Architectural visualization",
+      "client": "Real estate · AI concept",
+      "video": "assets/work/ai-video/architectural-visualization.mp4",
+      "poster": "assets/work/ai-video/posters/architectural-visualization.jpg",
       "featured": false
     },
     {

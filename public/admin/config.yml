@@ -30,11 +30,13 @@ collections:
             summary: "{{fields.type}} · {{fields.title}}"
             fields:
               - { name: id, label: "ID (unique, no spaces)", widget: string }
-              - { name: type, label: Type, widget: select, options: [Reels, Carousels, Ads, Websites] }
+              - { name: type, label: Type, widget: select, options: [Reels, Carousels, AI Video, Ads, Websites] }
               - { name: title, label: Title, widget: string }
               - { name: client, label: Client, widget: string }
-              - { name: stat, label: "Stat (shown in lime)", widget: string }
+              - { name: stat, label: "Stat (shown in lime)", widget: string, required: false }
               - { name: video, label: "Video (Reels, or a video ad)", widget: file, required: false, media_folder: "/assets/work/reels", public_folder: "assets/work/reels" }
+              - { name: ratio, label: "Frame shape (video)", widget: select, options: ["9:16", "16:9", "4:5", "1:1"], required: false, hint: "Leave empty for 9:16. Use 16:9 for landscape videos." }
+              - { name: sound, label: "Video has sound", widget: boolean, default: true, required: false }
               - { name: poster, label: "Video poster image", widget: image, required: false, media_folder: "/assets/work/posters", public_folder: "assets/work/posters" }
               - name: slides
                 label: "Carousel slides (1080×1350)"

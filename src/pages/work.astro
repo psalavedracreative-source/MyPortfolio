@@ -12,12 +12,12 @@ const filters = [
 <Base
   page="work"
   title={`Work | ${site.brand}`}
-  description="Reels, carousels, ads and websites made for brands that want results, not just likes."
+  description="Reels, carousels, AI video, ads and websites made for brands that want results, not just likes."
 >
   <section class="container work-head">
     <p class="kicker">Selected work</p>
     <h1 class="h1">Work that <span class="lime">moves</span> people.</h1>
-    <p class="lead">Reels, carousels, ads and websites made for brands that want results, not just likes.</p>
+    <p class="lead">Reels, carousels, AI video, ads and websites made for brands that want results, not just likes.</p>
   </section>
 
   <section class="container" aria-label="Work samples" data-work>
@@ -29,7 +29,7 @@ const filters = [
       ))}
     </div>
     <p class="sr-only" aria-live="polite" data-filter-status></p>
-    <div class="grid">
+    <div class="grid" data-grid>
       {workItems.map((item, i) => <WorkCard item={item} index={i} />)}
     </div>
   </section>
@@ -42,6 +42,7 @@ const filters = [
   .work-head .h1 { max-width: 14ch; }
   .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; margin-top: 32px; align-items: start; }
+  .grid[data-masonry] { grid-auto-rows: 4px; row-gap: 0; grid-auto-flow: row dense; }
 </style>
 
 <script>

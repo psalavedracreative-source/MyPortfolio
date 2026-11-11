@@ -6,7 +6,7 @@ import { imageFor, videoFor, slugify, type WorkItem } from '../lib/content';
 interface Props { item: WorkItem; index: number }
 const { item, index } = Astro.props;
 
-const tagFor: Record<string, string> = { Reels: 'Reel', Carousels: 'Carousel', Ads: 'Ad', Websites: 'Website' };
+const tagFor: Record<string, string> = { Reels: 'Reel', Carousels: 'Carousel', 'AI Video': 'AI video', Ads: 'Ad', Websites: 'Website' };
 const tag = tagFor[item.type] ?? item.type;
 const type = slugify(item.type);
 
@@ -16,28 +16,29 @@ const poster = posterImg ? (await getImage({ src: posterImg, width: 640, format:
 const slides = (item.slides ?? []).map((s) => imageFor(s)).filter((s): s is NonNullable<typeof s> => !!s);
 const image = imageFor(item.image);
 
-const kind = item.type === 'Reels' && video ? 'reel'
-  : slides.length ? 'carousel'
-  : video ? 'video'
+const kind = slides.length ? 'carousel'
+  : video ? 'reel'
   : image ? 'image'
   : 'empty';
-const ratio = kind === 'reel' || (kind === 'video' && item.type === 'Reels') ? '9 / 16' : '4 / 5';
+// "16:9" → [16, 9]; videos default to vertical 9:16, everything else to 4:5.
+const [rw, rh] = (item.ratio ?? (kind === 'reel' ? '9:16' : '4:5')).split(/[:/x ]+/).map(Number);
+const ratio = rw > 0 && rh > 0 ? `${rw} / ${rh}` : '4 / 5';
+const wide = rw > rh;
+const hasSound = item.sound !== false;
 const pictureProps = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 340px', formats: ['avif', 'webp'] as const };
 ---
-<article class="card tile" data-type={type} data-kind={kind}>
+<article class:list={['card tile', { wide }]} data-type={type} data-kind={kind}>
   <div class="media" style={`aspect-ratio:${ratio}`}>
     {kind === 'reel' && (
       <>
         <video src={video} poster={poster} muted loop playsinline preload="metadata" aria-label={item.title} data-reel></video>
-        <button class="sound" type="button" data-sound aria-pressed="false" aria-label="Turn sound on">
-          <span class="ico-off"><Icon name="sound-off" size={18} /></span><span class="ico-on"><Icon name="sound-on" size={18} /></span>
-        </button>
+        {hasSound && (
+          <button class="sound" type="button" data-sound aria-pressed="false" aria-label="Turn sound on">
+            <span class="ico-off"><Icon name="sound-off" size={18} /></span><span class="ico-on"><Icon name="sound-on" size={18} /></span>
+          </button>
+        )}
         <span class="badge autoplay"><span class="rec" aria-hidden="true"></span>Autoplay</span>
       </>
-    )}
-
-    {kind === 'video' && (
-      <video src={video} poster={poster} muted loop playsinline preload="metadata" aria-label={item.title} data-reel></video>
     )}
 
     {kind === 'carousel' && (
@@ -77,7 +78,7 @@ const pictureProps = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw
       <h2 class="title">{item.title}</h2>
       <p class="client">{item.client}</p>
     </div>
-    <p class="stat">{item.stat}</p>
+    {item.stat && <p class="stat">{item.stat}</p>}
   </div>
 </article>
 
@@ -85,6 +86,7 @@ const pictureProps = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw
   .tile { overflow: hidden; border-radius: 22px; transition: transform .25s ease, border-color .25s ease; }
   .tile:hover { transform: translateY(-4px); border-color: var(--line-2); }
   .tile[hidden] { display: none; }
+  @media (min-width: 640px) { .tile.wide { grid-column: span 2; } }
   .media { position: relative; background: var(--bg); overflow: hidden; }
   .media video, .fill, .fill :global(img), .slide :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
   .media video { position: absolute; inset: 0; }

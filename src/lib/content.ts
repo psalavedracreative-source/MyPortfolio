@@ -23,8 +23,12 @@ export type WorkItem = {
   type: string;
   title: string;
   client: string;
-  stat: string;
+  stat?: string;
   video?: string;
+  /** Frame shape, e.g. "9:16", "16:9", "4:5", "1:1". Defaults: video 9:16, everything else 4:5. */
+  ratio?: string;
+  /** Set to false when a video has no audio track, to hide the sound button. */
+  sound?: boolean;
   poster?: string;
   slides?: string[];
   image?: string;
@@ -74,6 +78,6 @@ export const videoFor = (path: unknown): string | undefined =>
   typeof path === 'string' && !isPlaceholder(path) ? videoModules[key(path)] : undefined;
 
 // ---------- work ----------
-export const workTypes = ['Reels', 'Carousels', 'Ads', 'Websites'] as const;
+export const workTypes = ['Reels', 'Carousels', 'AI Video', 'Ads', 'Websites'] as const;
 export const workItems = work.items as WorkItem[];
 export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
