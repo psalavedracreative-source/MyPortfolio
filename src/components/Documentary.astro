@@ -1,8 +1,8 @@
 ---
 import { Picture } from 'astro:assets';
 import Icon from './Icon.astro';
-import { about, imageFor } from '../lib/content';
-const chapters = about.documentary.map((c) => ({ ...c, img: imageFor(c.photo) }));
+import { about, imageFor, tidy } from '../lib/content';
+const chapters = about.documentary.map((c) => ({ ...c, img: imageFor(c.photo), year: tidy(c.year), caption: tidy(c.caption) }));
 const SECONDS = 5;
 ---
 <section class="container doc-wrap" aria-label="My story, as a short documentary" data-doc data-seconds={SECONDS}>
@@ -25,7 +25,7 @@ const SECONDS = 5;
     <div class="subs" aria-live="polite">
       {chapters.map((c, i) => (
         <div class="sub" data-sub={i} aria-hidden={i === 0 ? 'false' : 'true'} data-on={i === 0 ? '' : undefined}>
-          <p class="sub-ch">{c.chapter} · {c.year}</p>
+          <p class="sub-ch">{c.chapter}{c.year && ` · ${c.year}`}</p>
           <p class="sub-cap">{c.caption}</p>
         </div>
       ))}

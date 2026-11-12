@@ -25,6 +25,8 @@ npm run preview   # serve the production build locally
 content/            ← ALL the words, links and numbers (edit these)
   site.json           business info, booking link, promises, process, client logos, testimonials, form endpoint
   services.json       the 6 service cards
+  case-studies.json   case studies (Work page, their own pages, Home proof section)
+  pricing.json        the 3 "starting from" packages
   work.json           work samples (Work page) + the home-page proof cover flow
   about.json          bio, stat tiles, documentary chapters, certificates, gallery
   assistant-faq.json  what the chat assistant knows
@@ -39,6 +41,15 @@ netlify.toml        ← Netlify build settings
 Content is never hard-coded: every page is rendered from the JSON files. Images referenced in JSON (`"assets/..."`) are optimized automatically at build time (AVIF/WebP, responsive sizes, lazy-loaded below the fold).
 
 **Placeholders:** anything in `[BRACKETS]` is shown on the site exactly as written until you replace it. A path that points to a file that doesn't exist yet (for example `"[cover image]"`) shows a tidy dashed empty slot instead.
+
+---
+
+## Drafts and going live
+
+Everything still waiting for your real content is drafted with `[PLACEHOLDERS]` so you can see the layout. One switch controls it, in `content/site.json` (or `/admin` → Site settings):
+
+- `"show_drafts": true` (now): placeholders are shown, so you can review every section.
+- `"show_drafts": false` (when you go live): anything still unfinished is hidden: draft case studies, prices, the intro video slot, the video-testimonial slot, platform badges, empty work slots and `[X]` stats, unfinished About certificates and gallery photos, the placeholder email, and `[...]` notes in the FAQ and chat answers. Each piece reappears on its own as soon as you fill it in.
 
 ---
 
@@ -74,6 +85,25 @@ You can edit the JSON files directly (then commit and push), or use the editor a
 ### Home-page proof cover flow
 
 Edit `proof_coverflow` in `content/work.json`. Each card has `tag`, `client`, `cover` (an image path), `stat`, `unit` and the punchy `line` shown under the cards. Work items with `"featured": true` are added to the end of the cover flow.
+
+### Case studies
+
+Edit `content/case-studies.json` (or `/admin` → Case studies & pricing). Each case study gets:
+
+- its own page at `/work/<slug>`: headline result, before → after numbers, where it started, what you did, analytics screenshots (click to enlarge), a before/after of the feed or profile, content samples, the client's quote, and a link to the next case study;
+- a card in **Case studies** at the top of the Work page;
+- a card in the Home page proof section when `"featured": true`, linking to its page.
+
+Put images in `assets/case-studies/<slug>/` and point to them. Screenshots should show the dates. If `brand` matches a name in `client_logos`, that brand's logo is reused and its logo in the "Brands I've worked with" strip links to the case study.
+
+### Pricing, intro video, free audit, FAQ, badges (Home page)
+
+- **Packages:** `content/pricing.json`. Each package has a `price` shown as "from ₱…", what it includes, and `featured` to highlight one.
+- **Intro video:** `intro_video` in `content/site.json`. Put the MP4 in `assets/intro/` and set `video` (and `ratio`: 9:16 for a phone video, 16:9 for landscape).
+- **Free profile audit form:** `audit` in `content/site.json` holds the text. Requests go to `form_endpoint` (see *Lead form* below), the same as the chat assistant's form.
+- **FAQ:** built from the assistant's answers. Any topic in `content/assistant-faq.json` with a `"faq"` question is shown, in `faq_order`. Editing an answer updates both the chat and the FAQ.
+- **Platform badges:** `platform_badges` in `content/site.json`, shown under the testimonials as "Verified on". Add `url` to link to your profile. Only use badges you actually have.
+- **Video testimonial:** a testimonial with a `video` (MP4 in `assets/testimonials/`) is shown beside the featured quote.
 
 ### Photos, certificates, gallery (About page)
 
@@ -154,8 +184,17 @@ In the editor you can change the work library and cover flow, the About page (do
 - `cta_primary.url`: `[GOOGLE_CALENDAR_BOOKING_LINK]`
 - `links.email`: `[YOUR_PUBLIC_EMAIL]`
 - `client_logos`: BikeAddict has no logo file yet (shows a "BA" badge)
-- `testimonials`: no `platform` / `url` links to the original reviews yet; no client names or brands yet (optional `name` / `brand`; adding them makes the quotes more convincing)
+- `testimonials`: the video testimonial (`video`, `quote`, `name`, `brand`); no `platform` / `url` links to the original reviews yet; no client names or brands yet (optional `name` / `brand`; adding them makes the quotes more convincing)
 - `form_endpoint`: `[FORM_ENDPOINT_URL e.g. Formspree or Web3Forms]`
+
+- `intro_video`: `video` file and `length`
+- `platform_badges` (2): platform, badge and detail, optional `url`
+
+**content/case-studies.json**
+- All 3 case studies are drafts: brand, platform, niche, headline, summary, period, results, where it started, what you did, screenshots, before/after, samples, quote. Delete any you don't need.
+
+**content/pricing.json**
+- Each package: `price`, `for`, the `[X]` inclusions, `[Other inclusion]`; the `badge` on the highlighted package
 
 **content/work.json**
 - Stats on the 4 samples: `[X] views` / `[X] saves`

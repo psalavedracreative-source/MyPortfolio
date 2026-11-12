@@ -1,0 +1,54 @@
+{
+  "kicker": "Packages",
+  "title": "Simple, honest",
+  "accent": "pricing.",
+  "intro": "Starting prices, so you know where you stand before we talk. Every package can be tailored on a free call.",
+  "note": "Every package: 50% to start, 50% when you're happy. Unlimited revisions.",
+  "packages": [
+    {
+      "name": "Starter",
+      "price": "₱[X]",
+      "period": "/ month",
+      "for": "[Who it's for, e.g. new pages getting started]",
+      "includes": [
+        "[X] posts per month",
+        "[X] reels",
+        "Captions and posting",
+        "[Other inclusion]"
+      ],
+      "featured": false,
+      "badge": ""
+    },
+    {
+      "name": "Growth",
+      "price": "₱[X]",
+      "period": "/ month",
+      "for": "[Who it's for, e.g. pages ready to grow faster]",
+      "includes": [
+        "[X] posts per month",
+        "[X] reels",
+        "[X] stories",
+        "Monthly content plan",
+        "[Other inclusion]"
+      ],
+      "featured": true,
+      "badge": "[Badge, e.g. Most popular]"
+    },
+    {
+      "name": "Full",
+      "price": "₱[X]",
+      "period": "/ month",
+      "for": "[Who it's for, e.g. brands that want it all handled]",
+      "includes": [
+        "[X] posts per month",
+        "[X] reels",
+        "Meta ads support",
+        "Monthly report",
+        "[Other inclusion]"
+      ],
+      "featured": false,
+      "badge": ""
+    }
+  ],
+  "custom": "Need something different? Book a free call and we'll build a package around your goals."
+}

@@ -1,7 +1,7 @@
 ---
 import { Picture, getImage } from 'astro:assets';
 import Icon from './Icon.astro';
-import { imageFor, videoFor, slugify, filterFor, type WorkItem } from '../lib/content';
+import { imageFor, videoFor, slugify, filterFor, keep, type WorkItem } from '../lib/content';
 
 interface Props { item: WorkItem; index: number }
 const { item, index } = Astro.props;
@@ -25,7 +25,7 @@ const [rw, rh] = (item.ratio ?? (kind === 'reel' ? '9:16' : '4:5')).split(/[:/x 
 const ratio = rw > 0 && rh > 0 ? `${rw} / ${rh}` : '4 / 5';
 const wide = rw > rh;
 const hasSound = item.sound !== false;
-const pictureProps = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 340px', formats: ['avif', 'webp'] as const };
+const pictureProps = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 340px', formats: ['avif', 'webp'] as ('avif' | 'webp')[] };
 ---
 <article class:list={['card tile', { wide }]} data-type={type} data-kind={kind}>
   <div class="media" style={`aspect-ratio:${ratio}`}>
@@ -78,7 +78,7 @@ const pictureProps = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw
       <h2 class="title">{item.title}</h2>
       <p class="client">{item.client}</p>
     </div>
-    {item.stat && <p class="stat">{item.stat}</p>}
+    {item.stat && keep(item.stat) && <p class="stat">{item.stat}</p>}
   </div>
 </article>
 

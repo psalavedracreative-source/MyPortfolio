@@ -9,6 +9,8 @@ import servicesJson from '../../content/services.json';
 import workJson from '../../content/work.json';
 import aboutJson from '../../content/about.json';
 import faqJson from '../../content/assistant-faq.json';
+import caseStudiesJson from '../../content/case-studies.json';
+import pricingJson from '../../content/pricing.json';
 import brandJson from '../../brand/brand.json';
 
 export const site = siteJson;
@@ -17,6 +19,8 @@ export const work = workJson;
 export const about = aboutJson;
 export const faq = faqJson;
 export const brand = brandJson;
+export const pricing = pricingJson;
+export const caseStudiesPage = { title: caseStudiesJson.title, intro: caseStudiesJson.intro };
 
 export type WorkItem = {
   id: string;
@@ -45,6 +49,20 @@ export const isPlaceholder = (value: unknown): boolean =>
 /** A link is usable when it is a real http(s)/mailto URL with no placeholder in it. */
 export const isRealUrl = (url: unknown): url is string =>
   typeof url === 'string' && !isPlaceholder(url) && /^(https?:\/\/|mailto:)/i.test(url);
+
+// ---------- drafts ----------
+/** site.json → show_drafts. true: unfinished [PLACEHOLDER] content is shown (for review). false: it is hidden. */
+export const showDrafts: boolean = (site as { show_drafts?: boolean }).show_drafts !== false;
+/** True when a value, or anything inside it, still holds a [BRACKETED] placeholder. */
+export const hasPlaceholder = (v: unknown): boolean =>
+  typeof v === 'string' ? /\[[^\]]*\]/.test(v)
+  : Array.isArray(v) ? v.some(hasPlaceholder)
+  : v !== null && typeof v === 'object' ? Object.values(v).some(hasPlaceholder)
+  : false;
+/** Keep an item on the page: always while drafts are shown, otherwise only once it has no placeholders left. */
+export const keep = (v: unknown): boolean => showDrafts || !hasPlaceholder(v);
+/** Text with its [PLACEHOLDER] parts removed when drafts are hidden. */
+export const tidy = (s: string): string => (showDrafts ? s : s.replace(/\s*\[[^\]]*\]/g, '').replace(/\s+([.,:;!?])/g, '$1').trim());
 
 /** Booking link; until the calendar link is set, fall back to the DM link so the button still works. */
 export const bookingUrl: string = isRealUrl(site.cta_primary.url) ? site.cta_primary.url : site.cta_dm.url;
@@ -88,3 +106,24 @@ export const allLimit = Number(work.all_limit) > 0 ? Number(work.all_limit) : 8;
 /** The filter a work item belongs to: AI videos go under their content style (UGC, BGC…), everything else under its type. */
 export const filterFor = (w: WorkItem) => (w.type === 'AI Video' && w.style ? w.style : w.type);
 export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+// ---------- case studies ----------
+export type CaseStudy = (typeof caseStudiesJson)['items'][number];
+const logoByName = new Map(site.client_logos.map((c) => [c.name.trim().toLowerCase(), c.logo]));
+/** Case studies that are ready to show (all of them while drafts are shown). */
+export const caseStudies = caseStudiesJson.items
+  .filter((c) => keep([c.brand, c.headline, c.results]))
+  .map((c) => ({ ...c, logo: c.logo || logoByName.get(c.brand.trim().toLowerCase()) || '' }));
+/** /work/<slug> for a brand name, if it has a case study. */
+export const caseStudyFor = (brandName: string) => {
+  const c = caseStudies.find((x) => !hasPlaceholder(x.brand) && x.brand.trim().toLowerCase() === brandName.trim().toLowerCase());
+  return c ? `/work/${c.slug}` : null;
+};
+
+// ---------- FAQ (questions marked with "faq" in assistant-faq.json) ----------
+type Intent = { id: string; answer: string; faq?: string; faq_order?: number };
+export const faqItems = (faqJson.intents as Intent[])
+  .filter((i) => i.faq)
+  .sort((a, b) => (a.faq_order ?? 99) - (b.faq_order ?? 99))
+  .map((i) => ({ id: i.id, q: i.faq!, a: tidy(i.answer) }))
+  .filter((i) => i.a);

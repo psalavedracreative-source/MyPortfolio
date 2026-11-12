@@ -1,0 +1,70 @@
+---
+import Icon from './Icon.astro';
+import { site, email, dmUrl, formEndpoint } from '../lib/content';
+
+type Audit = { kicker: string; title: string; accent: string; text: string; points: string[]; button: string };
+const a = (site as { audit?: Audit }).audit;
+const cfg = JSON.stringify({ endpoint: formEndpoint, email, dmUrl, owner: site.owner.split(' ')[0] });
+---
+{a && (
+  <section class="container section" id="audit" aria-labelledby="audit-title">
+    <div class="card audit">
+      <div class="audit-copy">
+        <p class="kicker">{a.kicker}</p>
+        <h2 class="h2" id="audit-title">{a.title} <span class="lime">{a.accent}</span></h2>
+        <p class="lead">{a.text}</p>
+        <ul class="points">
+          {a.points.map((p) => <li><span class="tick" aria-hidden="true"><Icon name="check" size={14} /></span>{p}</li>)}
+        </ul>
+      </div>
+
+      <form class="form" data-audit data-cfg={cfg} novalidate>
+        <div class="row">
+          <label>Your name<input name="name" type="text" autocomplete="name" required /></label>
+          <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+        </div>
+        <label>Link to your page<input name="page" type="url" inputmode="url" placeholder="https://instagram.com/yourbrand" required /></label>
+        <label>Platform
+          <select name="platform">
+            <option>Instagram</option><option>Facebook</option><option>TikTok</option><option>YouTube</option><option>Other</option>
+          </select>
+        </label>
+        <label><span>Your main goal <span class="opt">(optional)</span></span><textarea name="goal" rows="3" placeholder="e.g. more enquiries, more followers, launch a product"></textarea></label>
+        <p class="err" data-err role="alert" hidden></p>
+        <button class="btn btn-primary btn-lg" type="submit">{a.button}<Icon name="arrow" /></button>
+        <p class="fine">No spam. Your details are only used to reply to you.</p>
+      </form>
+    </div>
+  </section>
+)}
+
+<style>
+  .audit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 5vw, 64px); padding: clamp(24px, 5vw, 56px); border-radius: var(--r-lg); background: radial-gradient(90% 120% at 0% 100%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%), var(--surface); }
+  .audit-copy { display: flex; flex-direction: column; gap: 16px; }
+  .points { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  .points li { display: flex; align-items: center; gap: 12px; font-weight: 700; }
+  .tick { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); }
+
+  .form { display: flex; flex-direction: column; gap: 14px; }
+  .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  label { display: flex; flex-direction: column; gap: 6px; font-size: .875rem; font-weight: 700; color: var(--text-2, var(--text)); }
+  .opt { font-weight: 500; color: var(--muted); }
+  input, select, textarea { width: 100%; min-height: 50px; padding: 12px 14px; border-radius: 14px; border: 2px solid var(--line-2); background: var(--bg); color: var(--text); font: inherit; font-weight: 500; font-size: 1rem; }
+  textarea { resize: vertical; min-height: 90px; }
+  input::placeholder, textarea::placeholder { color: var(--muted); opacity: .8; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--accent); }
+  input[aria-invalid='true'] { border-color: #ff6b7a; }
+  .err { color: #ff8a96; font-weight: 600; }
+  .form .btn { justify-content: center; margin-top: 4px; }
+  .fine { color: var(--muted); font-size: .8125rem; text-align: center; }
+  .form :global(.done) { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 24px; border-radius: 20px; background: var(--bg); border: var(--border); }
+  .form :global(.done strong) { font-size: 1.25rem; }
+  .form :global(.done p) { color: var(--muted); }
+  @media (max-width: 860px) { .audit { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  import { initAudit } from '../scripts/audit';
+  document.querySelectorAll<HTMLFormElement>('[data-audit]').forEach(initAudit);
+</script>

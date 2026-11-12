@@ -3,7 +3,11 @@ import Base from '../layouts/Base.astro';
 import WorkCard from '../components/WorkCard.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
-import { site, workItems, workTypes, aiVideo, allLimit, filterFor, slugify } from '../lib/content';
+import CaseStudyCard from '../components/CaseStudyCard.astro';
+import { site, workItems as allItems, workTypes, aiVideo, allLimit, filterFor, slugify, keep, caseStudies, caseStudiesPage } from '../lib/content';
+
+// With drafts hidden, leave out samples that are still empty slots or placeholders.
+const workItems = allItems.filter((w) => keep([w.title, w.client]) && (keep(w) || w.video || w.image || w.slides?.length));
 
 // Filter buttons: each work type, with "AI Video" expanded into its content styles (UGC, BGC, …).
 // Buttons with nothing in them are left out.
@@ -26,7 +30,20 @@ const extra = workItems.length - allLimit;
     <p class="lead">Reels, carousels, AI video, ads and websites made for brands that want results, not just likes.</p>
   </section>
 
-  <section class="container" aria-label="Work samples" data-work data-limit={allLimit}>
+  {caseStudies.length > 0 && (
+    <section class="container cases" aria-labelledby="cases-title">
+      <div class="cases-head">
+        <h2 class="h2" id="cases-title">{caseStudiesPage.title}</h2>
+        <p class="cases-intro">{caseStudiesPage.intro}</p>
+      </div>
+      <ul class="cases-grid">
+        {caseStudies.map((c) => <li><CaseStudyCard study={c} /></li>)}
+      </ul>
+    </section>
+  )}
+
+  <section class="container" aria-labelledby="samples-title" data-work data-limit={allLimit}>
+    <h2 class="h2 samples-title" id="samples-title">{caseStudies.length > 0 ? 'More work' : 'Work samples'}</h2>
     <div class="filters" role="toolbar" aria-label="Filter work">
       {filters.map((f) => (
         <button class="chip" type="button" data-filter={f.value} aria-pressed={f.value === 'all' ? 'true' : 'false'}>
@@ -69,7 +86,15 @@ const extra = workItems.length - allLimit;
 <style>
   .work-head { display: flex; flex-direction: column; gap: 16px; padding-top: clamp(48px, 8vw, 88px); }
   .work-head .h1 { max-width: 14ch; }
-  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .samples-title { margin-top: clamp(48px, 7vw, 72px); font-size: clamp(1.5rem, 3vw, 2rem); }
+  .cases { margin-top: clamp(36px, 5vw, 52px); }
+  .cases-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+  .cases-head .h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+  .cases-intro { color: var(--muted); }
+  .cases-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 22px; }
+  .cases-grid > li { display: flex; }
+  .cases-grid > li > :global(*) { flex: 1; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; margin-top: 32px; align-items: start; }
   .grid[data-masonry] { grid-auto-rows: 4px; row-gap: 0; grid-auto-flow: row dense; }
 

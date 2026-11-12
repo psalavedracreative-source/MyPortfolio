@@ -1,0 +1,56 @@
+---
+import Icon from './Icon.astro';
+import { pricing, bookingUrl, keep, tidy } from '../lib/content';
+
+const packages = pricing.packages.filter((p) => keep([p.name, p.price]));
+---
+{packages.length > 0 && (
+  <section class="container section" id="pricing" aria-labelledby="pricing-title">
+    <div class="section-head center">
+      <p class="kicker">{pricing.kicker}</p>
+      <h2 class="h2" id="pricing-title">{pricing.title} <span class="lime">{pricing.accent}</span></h2>
+      <p class="lead">{pricing.intro}</p>
+    </div>
+
+    <ul class="plans">
+      {packages.map((p) => (
+        <li class:list={['card plan', { hot: p.featured }]}>
+          {p.badge && keep(p.badge) && <span class="badge">{p.badge}</span>}
+          <h3 class="plan-name">{p.name}</h3>
+          <p class="plan-for">{tidy(p.for)}</p>
+          <p class="plan-price"><span class="from">from</span><span class="amt">{p.price}</span><span class="per">{p.period}</span></p>
+          <ul class="incl">
+            {p.includes.filter((x) => keep(x)).map((x) => <li><span class="tick" aria-hidden="true"><Icon name="check" size={14} /></span>{x}</li>)}
+          </ul>
+          <a class:list={['btn', p.featured ? 'btn-primary' : 'btn-outline']} href={bookingUrl} target="_blank" rel="noopener">Book a free call<Icon name="arrow" /></a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="note"><Icon name="check" size={16} />{pricing.note}</p>
+    <p class="custom">{pricing.custom}</p>
+  </section>
+)}
+
+<style>
+  .section-head .lead { max-width: 56ch; }
+  .plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
+  .plan { position: relative; display: flex; flex-direction: column; gap: 14px; padding: clamp(24px, 3vw, 32px); border-radius: 26px; }
+  .plan.hot { border-color: var(--accent); background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%), var(--surface); }
+  .badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 5px 14px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); font-size: .75rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .plan-name { font-size: 1.375rem; font-weight: 800; letter-spacing: -0.02em; }
+  .plan-for { color: var(--muted); min-height: 3em; }
+  .plan-price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; padding-block: 6px 4px; }
+  .from { color: var(--muted); font-weight: 600; }
+  .amt { font-size: clamp(2.25rem, 4vw, 2.75rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .hot .amt { color: var(--accent); }
+  .per { color: var(--muted); font-weight: 600; }
+  .incl { display: flex; flex-direction: column; gap: 10px; padding-top: 14px; border-top: var(--border); flex: 1; }
+  .incl li { display: flex; gap: 10px; align-items: flex-start; }
+  .tick { flex: none; margin-top: 3px; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+  .plan .btn { justify-content: center; margin-top: 8px; }
+  .note { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 28px; font-weight: 700; text-align: center; }
+  .note :global(svg) { color: var(--accent); flex: none; }
+  .custom { margin-top: 8px; color: var(--muted); text-align: center; }
+  @media (max-width: 900px) { .plans { grid-template-columns: 1fr; max-width: 480px; margin-inline: auto; } .plan.hot { order: -1; } .plan-for { min-height: 0; } }
+</style>

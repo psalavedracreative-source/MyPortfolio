@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { imageFor, type CaseStudy } from '../lib/content';
+
+interface Props { study: CaseStudy & { logo: string }; headingLevel?: 'h2' | 'h3' }
+const { study: c, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+const logo = imageFor(c.logo);
+const initials = c.brand.replace(/\[|\]/g, '').replace(/([a-z])([A-Z])/g, '$1 $2').split(/\s+/).slice(0, 2).map((w) => w[0] ?? '').join('').toUpperCase() || 'CS';
+const top = c.results.slice(0, 2);
+---
+<a class="card cs" href={`/work/${c.slug}`}>
+  <div class="cs-top">
+    <span class="cs-logo" aria-hidden="true">
+      {logo ? <Image src={logo} alt="" height={96} format="webp" /> : <span>{initials}</span>}
+    </span>
+    <span class="cs-meta">
+      <span class="cs-brand">{c.brand}</span>
+      <span class="cs-sub">{c.platform} · {c.niche}</span>
+    </span>
+  </div>
+  <H class="cs-head">{c.headline}</H>
+  <ul class="cs-res">
+    {top.map((r) => (
+      <li>
+        <span class="cs-label">{r.label}</span>
+        <span class="cs-nums"><span class="cs-before">{r.before}</span><Icon name="arrow" size={16} /><span class="cs-after">{r.after}</span></span>
+      </li>
+    ))}
+  </ul>
+  <span class="cs-more">Read the case study <Icon name="arrow" size={18} /></span>
+</a>
+
+<style>
+  .cs { display: flex; flex-direction: column; gap: 18px; padding: clamp(22px, 3vw, 30px); border-radius: 26px; color: var(--text); text-decoration: none; transition: transform .25s ease, border-color .25s ease; background: radial-gradient(130% 120% at 100% 0%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 55%), var(--surface); }
+  .cs:hover { transform: translateY(-4px); border-color: var(--line-2); }
+  .cs-top { display: flex; align-items: center; gap: 14px; }
+  .cs-logo { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; overflow: hidden; background: var(--bg); border: var(--border); color: var(--accent); font-weight: 800; }
+  .cs-logo :global(img) { width: 40px; height: 40px; object-fit: contain; }
+  .cs-meta { display: flex; flex-direction: column; min-width: 0; }
+  .cs-brand { font-weight: 800; }
+  .cs-sub { color: var(--muted); font-size: .875rem; }
+  .cs-head { font-size: clamp(1.25rem, 2.2vw, 1.5rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; }
+  .cs-res { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .cs-res li { padding: 12px 14px; border-radius: 16px; background: var(--bg); border: var(--border); }
+  .cs-label { display: block; color: var(--muted); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .cs-nums { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-weight: 800; flex-wrap: wrap; }
+  .cs-nums :global(svg) { color: var(--muted); }
+  .cs-before { color: var(--muted); }
+  .cs-after { color: var(--accent); font-size: 1.25rem; }
+  .cs-more { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--accent); }
+  .cs:hover .cs-more :global(svg) { transform: translateX(3px); }
+  .cs-more :global(svg) { transition: transform .2s; }
+</style>

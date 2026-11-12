@@ -1,0 +1,49 @@
+---
+import { getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import { site, about, videoFor, imageFor, keep, bookingUrl } from '../lib/content';
+
+const v = (site as { intro_video?: { kicker: string; title: string; accent: string; text: string; video: string; poster: string; length: string; ratio?: string } }).intro_video;
+const video = v ? videoFor(v.video) : undefined;
+const posterImg = v ? imageFor(v.poster) ?? imageFor(about.hero_photo) : undefined;
+const poster = posterImg ? (await getImage({ src: posterImg, width: 720, format: 'webp', quality: 76 })).src : undefined;
+const [rw, rh] = (v?.ratio ?? '9:16').split(':').map(Number);
+const show = v && (video || keep(v.video));
+---
+{show && v && (
+  <section class="container section intro" aria-labelledby="intro-title">
+    <div class="intro-copy">
+      <p class="kicker">{v.kicker}</p>
+      <h2 class="h2" id="intro-title">{v.title} <span class="lime">{v.accent}</span></h2>
+      <p class="lead">{v.text}</p>
+      <div class="intro-cta">
+        <a class="btn btn-primary" href={bookingUrl} target="_blank" rel="noopener">{site.cta_primary.label}<Icon name="arrow" /></a>
+      </div>
+    </div>
+
+    <div class="frame" style={`aspect-ratio:${rw} / ${rh}`}>
+      {video
+        ? <video src={video} poster={poster} controls playsinline preload="metadata" aria-label={`${v.title} ${v.accent} Intro video`}></video>
+        : (
+          <div class="draft" style={poster ? `background-image:url(${poster})` : undefined}>
+            <span class="play" aria-hidden="true"><Icon name="play" size={28} /></span>
+            <span class="draft-note">Intro video · {v.length}<span>{v.video}</span></span>
+          </div>
+        )}
+    </div>
+  </section>
+)}
+
+<style>
+  .intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: clamp(28px, 6vw, 80px); align-items: center; }
+  .intro-copy { display: flex; flex-direction: column; gap: 16px; }
+  .intro-cta { margin-top: 8px; }
+  .frame { position: relative; width: 100%; max-width: 360px; justify-self: center; border-radius: var(--r-lg); overflow: hidden; background: var(--surface); border: var(--border); box-shadow: 0 30px 80px -30px color-mix(in srgb, var(--accent) 35%, transparent); }
+  .frame video { width: 100%; height: 100%; object-fit: cover; display: block; background: #000; }
+  .draft { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background-size: cover; background-position: 50% 25%; }
+  .draft::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14, 15, 19, .25), rgba(14, 15, 19, .8)); }
+  .play { position: relative; width: 76px; height: 76px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; padding-left: 4px; }
+  .draft-note { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 16px; text-align: center; font-weight: 700; color: var(--text); }
+  .draft-note span { font-size: .75rem; font-weight: 500; color: var(--text-2, var(--muted)); word-break: break-all; }
+  @media (max-width: 760px) { .intro { grid-template-columns: 1fr; } .frame { max-width: 320px; } }
+</style>

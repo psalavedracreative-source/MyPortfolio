@@ -64,7 +64,7 @@
       ]
     },
     {
-      "id": "pricing",
+      "id": "pricing", "faq": "How much does it cost?", "faq_order": 1,
       "examples": [
         "how much does it cost",
         "what are your rates",
@@ -93,7 +93,7 @@
       ]
     },
     {
-      "id": "included",
+      "id": "included", "faq": "What's included in a package?", "faq_order": 2,
       "examples": [
         "what is included in a package",
         "what do i get",
@@ -113,7 +113,7 @@
       ]
     },
     {
-      "id": "turnaround",
+      "id": "turnaround", "faq": "How fast will I get my first content?", "faq_order": 4,
       "examples": [
         "how long does it take",
         "turnaround time",
@@ -138,7 +138,7 @@
       ]
     },
     {
-      "id": "payment",
+      "id": "payment", "faq": "How does payment work?", "faq_order": 5,
       "examples": [
         "how do i pay",
         "payment terms",
@@ -162,7 +162,7 @@
       ]
     },
     {
-      "id": "revisions",
+      "id": "revisions", "faq": "What if I don't like something?", "faq_order": 6,
       "examples": [
         "how many revisions",
         "what if i don't like it",
@@ -203,7 +203,7 @@
       ]
     },
     {
-      "id": "process",
+      "id": "process", "faq": "How does working together work?", "faq_order": 3,
       "examples": [
         "how does it work",
         "what is the process",
@@ -251,7 +251,7 @@
       "action": "open_booking"
     },
     {
-      "id": "platforms",
+      "id": "platforms", "faq": "Which platforms do you cover?", "faq_order": 8,
       "examples": [
         "which platforms do you handle",
         "do you do tiktok",
@@ -276,7 +276,7 @@
       ]
     },
     {
-      "id": "ads",
+      "id": "ads", "faq": "Do you run Meta ads?", "faq_order": 9,
       "examples": [
         "do you run facebook ads",
         "meta ads",
@@ -323,7 +323,7 @@
       "action": "go_work"
     },
     {
-      "id": "needs",
+      "id": "needs", "faq": "What do you need from me to start?", "faq_order": 7,
       "examples": [
         "what do you need from me",
         "do i need to provide content",

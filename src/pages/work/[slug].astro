@@ -1,0 +1,177 @@
+---
+import Base from '../../layouts/Base.astro';
+import Shot from '../../components/Shot.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { Image } from 'astro:assets';
+import { site, caseStudies, imageFor, keep } from '../../lib/content';
+
+export function getStaticPaths() {
+  return caseStudies.map((c, i) => ({ params: { slug: c.slug }, props: { i } }));
+}
+const { i } = Astro.props as { i: number };
+const c = caseStudies[i];
+const next = caseStudies.length > 1 ? caseStudies[(i + 1) % caseStudies.length] : null;
+const logo = imageFor(c.logo);
+
+// While drafts are hidden, leave out any part that is still a placeholder.
+const proof = c.proof.filter((p) => keep(p));
+const ba = c.before_after && keep(c.before_after) ? c.before_after : null;
+const samples = c.samples.filter((s) => keep(s));
+const quote = c.quote && keep(c.quote) ? c.quote : null;
+const approach = c.approach.filter((a) => keep(a));
+---
+<Base page="work" title={`${c.brand}: case study | ${site.brand}`} description={c.summary}>
+  <article class="container cs-page">
+    <a class="back" href="/work"><Icon name="arrow-left" size={18} />All work</a>
+
+    <header class="cs-hero">
+      <div class="cs-id">
+        {logo && <span class="cs-logo"><Image src={logo} alt="" height={112} format="webp" /></span>}
+        <p class="kicker">Case study · {c.platform} · {c.niche}</p>
+      </div>
+      <h1 class="h1 cs-title">{c.headline}</h1>
+      <p class="lead">{c.summary}</p>
+      <p class="cs-period"><Icon name="calendar" size={18} />{c.period}</p>
+    </header>
+
+    <section aria-labelledby="res-title">
+      <h2 class="sr-only" id="res-title">Results</h2>
+      <ul class="results">
+        {c.results.map((r) => (
+          <li class="card res">
+            <p class="res-label">{r.label}</p>
+            <p class="res-after">{r.after}</p>
+            <p class="res-before">from {r.before}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="story" aria-label="The story">
+      <div class="card block">
+        <p class="kicker">Where it started</p>
+        <p class="block-text">{c.challenge}</p>
+      </div>
+      <div class="card block">
+        <p class="kicker">What I did</p>
+        <ol class="steps">
+          {approach.map((a, n) => <li><span class="n" aria-hidden="true">{n + 1}</span><span>{a}</span></li>)}
+        </ol>
+      </div>
+    </section>
+
+    {proof.length > 0 && (
+      <section class="sec" aria-labelledby="proof-title">
+        <h2 class="h2" id="proof-title">The <span class="lime">proof.</span></h2>
+        <p class="sec-sub">Straight from the analytics. Click a screenshot to see it full size.</p>
+        <ul class="proof">
+          {proof.map((p) => (
+            <li>
+              <Shot src={p.image} alt={p.caption} label="Analytics screenshot" ratio="4 / 3" group="proof" caption={p.caption} fit="contain" sizes="(max-width: 760px) 100vw, 580px" />
+              <p class="cap">{p.caption}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {ba && (
+      <section class="sec" aria-labelledby="ba-title">
+        <h2 class="h2" id="ba-title">Before <span class="lime">&amp; after.</span></h2>
+        <div class="ba">
+          <figure>
+            <Shot src={ba.before} alt={`${c.brand} before`} label="Before" ratio="4 / 5" group="ba" caption={`Before · ${ba.caption}`} />
+            <figcaption><span class="tag">Before</span></figcaption>
+          </figure>
+          <figure>
+            <Shot src={ba.after} alt={`${c.brand} after`} label="After" ratio="4 / 5" group="ba" caption={`After · ${ba.caption}`} />
+            <figcaption><span class="tag on">After</span></figcaption>
+          </figure>
+        </div>
+        <p class="cap center">{ba.caption}</p>
+      </section>
+    )}
+
+    {samples.length > 0 && (
+      <section class="sec" aria-labelledby="samples-title">
+        <h2 class="h2" id="samples-title">The <span class="lime">work.</span></h2>
+        <ul class="samples">
+          {samples.map((s, n) => <li><Shot src={s} alt={`${c.brand}, content sample ${n + 1}`} label="Post or reel" ratio="4 / 5" group="samples" sizes="(max-width: 760px) 50vw, 380px" /></li>)}
+        </ul>
+      </section>
+    )}
+
+    {quote && (
+      <figure class="card quote">
+        <span class="mark" aria-hidden="true">“</span>
+        <blockquote><p>{quote.text}</p></blockquote>
+        <figcaption>{quote.name} · {quote.role}</figcaption>
+      </figure>
+    )}
+
+    {next && next.slug !== c.slug && (
+      <a class="card next" href={`/work/${next.slug}`}>
+        <span class="next-k">Next case study</span>
+        <span class="next-t">{next.headline}</span>
+        <Icon name="arrow" size={22} />
+      </a>
+    )}
+  </article>
+
+  <CtaBand title="Want results like these for" accent="your page?" dm />
+  <Lightbox />
+</Base>
+
+<style>
+  .cs-page { padding-top: clamp(28px, 5vw, 48px); }
+  .back { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--muted); font-weight: 600; text-decoration: none; }
+  .back:hover { color: var(--text); }
+  .cs-hero { display: flex; flex-direction: column; gap: 16px; margin-top: clamp(20px, 3vw, 32px); max-width: 900px; }
+  .cs-id { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .cs-logo { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: var(--border); }
+  .cs-logo :global(img) { width: 42px; height: 42px; object-fit: contain; }
+  .cs-title { font-size: clamp(2rem, 5vw, 3.5rem); }
+  .cs-period { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-weight: 600; }
+  .cs-period :global(svg) { color: var(--accent); }
+
+  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: clamp(32px, 5vw, 48px); }
+  .res { padding: clamp(20px, 3vw, 28px); border-radius: 22px; }
+  .res-label { color: var(--muted); font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .res-after { margin-top: 6px; font-size: clamp(2.25rem, 5vw, 3.25rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; color: var(--accent); }
+  .res-before { margin-top: 6px; color: var(--muted); font-weight: 600; }
+
+  .story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px; margin-top: 16px; }
+  .block { padding: clamp(22px, 3vw, 32px); border-radius: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .block-text { color: var(--text-2, var(--text)); font-size: 1.0625rem; line-height: 1.65; }
+  .steps { display: flex; flex-direction: column; gap: 12px; }
+  .steps li { display: flex; gap: 12px; align-items: flex-start; font-size: 1.0625rem; line-height: 1.5; }
+  .n { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-size: .875rem; font-weight: 800; }
+
+  .sec { margin-top: clamp(56px, 8vw, 88px); }
+  .sec-sub { margin-top: 10px; color: var(--muted); }
+  .proof { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 28px; }
+  .cap { margin-top: 10px; color: var(--muted); font-size: .9375rem; font-weight: 600; }
+  .cap.center { text-align: center; }
+  .ba { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 2vw, 20px); margin-top: 28px; }
+  .ba figure { position: relative; }
+  .ba figcaption { position: absolute; top: 12px; left: 12px; z-index: 2; }
+  .tag { display: inline-block; padding: 6px 12px; border-radius: 999px; background: rgba(14, 15, 19, .8); color: var(--text); font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .tag.on { background: var(--accent); color: var(--accent-ink); }
+  .samples { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 28px; }
+
+  .quote { margin-top: clamp(56px, 8vw, 88px); padding: clamp(28px, 5vw, 52px); border-radius: var(--r-lg); }
+  .mark { display: block; height: .5em; font: 800 clamp(4rem, 8vw, 6rem)/.9 Georgia, 'Times New Roman', serif; color: var(--accent); }
+  .quote blockquote { margin-top: 24px; }
+  .quote blockquote p { font-size: clamp(1.25rem, 2.8vw, 1.875rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; max-width: 36ch; }
+  .quote figcaption { margin-top: 18px; color: var(--muted); font-weight: 600; }
+
+  .next { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 6px 16px; margin-top: 20px; padding: clamp(20px, 3vw, 28px); border-radius: 22px; color: var(--text); text-decoration: none; transition: border-color .25s; }
+  .next:hover { border-color: var(--accent); }
+  .next-k { grid-column: 1; color: var(--muted); font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .next-t { grid-column: 1; font-size: clamp(1.125rem, 2vw, 1.375rem); font-weight: 800; }
+  .next :global(svg) { grid-column: 2; grid-row: 1 / span 2; color: var(--accent); }
+
+  @media (max-width: 760px) { .story { grid-template-columns: 1fr; } }
+</style>

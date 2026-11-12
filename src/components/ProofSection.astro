@@ -1,7 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import Icon from './Icon.astro';
-import { work, workItems, imageFor, type ProofCard } from '../lib/content';
+import { work, workItems, imageFor, keep, caseStudies, type ProofCard } from '../lib/content';
 
 // Cover-flow cards: work.json → proof_coverflow, plus any work item marked "featured": true.
 const featured: ProofCard[] = workItems
@@ -10,7 +10,26 @@ const featured: ProofCard[] = workItems
     const [stat, ...unit] = (w.stat || '').split(' ');
     return { tag: w.type, client: w.client, cover: w.poster || w.image || w.slides?.[0] || '[cover image]', stat, unit: unit.join(' '), line: w.title };
   });
-const cards = [...work.proof_coverflow, ...featured].map((c, i) => ({ ...c, i, img: imageFor(c.cover) }));
+// Featured case studies come first, and link to their full story.
+const studies: (ProofCard & { href?: string })[] = caseStudies
+  .filter((c) => c.featured)
+  .map((c) => ({
+    tag: 'Case study',
+    client: c.brand,
+    cover: c.before_after?.after || c.proof?.[0]?.image || '[cover image]',
+    stat: c.results[0]?.after ?? '',
+    unit: (c.results[0]?.label ?? '').toLowerCase(),
+    line: c.headline,
+    href: `/work/${c.slug}`,
+  }));
+// With drafts hidden, cards still holding [PLACEHOLDERS] (other than a missing cover image) are left out.
+const cards = [...studies, ...work.proof_coverflow, ...featured]
+  .filter((c) => keep([c.tag, c.client, c.stat, c.unit, c.line]))
+  .map((c, i) => ({ ...c, i, img: imageFor(c.cover), href: (c as { href?: string }).href }));
+
+// No finished cards (drafts hidden and nothing filled in yet): the cover links to the Work page instead.
+const Cover = cards.length ? 'button' : 'a';
+const coverAttrs: Record<string, string> = cards.length ? { type: 'button', 'data-open': '' } : { href: '/work' };
 
 // Card looks cycle through the prototype's five styles.
 const looks = [
@@ -49,7 +68,7 @@ const comments = [
   { text: 'That edit though', ini: 'D', bg: '#B7A6FF', left: '44%' },
 ].map((c, i) => ({ ...c, dur: (9 + (i % 3)).toFixed(1), delay: (-(i * 1.7)).toFixed(1) }));
 ---
-<section class="proof section" id="proof" aria-labelledby="proof-title" data-proof>
+<section class="proof section" id="proof" aria-labelledby="proof-title" data-proof={cards.length ? '' : undefined}>
   <div class="container">
     <div class="section-head center">
       <p class="kicker">The proof</p>
@@ -59,7 +78,7 @@ const comments = [
 
     <!-- Cover -->
     <div class="cover-wrap" data-view="cover">
-      <button class="cover" type="button" data-open>
+      <Cover class="cover" {...coverAttrs}>
         <span class="live-badge"><span class="live-dot" aria-hidden="true"></span>LIVE · Client reactions</span>
         <span class="tap-badge" aria-hidden="true">Tap to open</span>
         <span class="reactions" aria-hidden="true">
@@ -78,11 +97,11 @@ const comments = [
           <span class="cover-title">Content people<br />can't <span class="lime">scroll past.</span></span>
           <span class="btn btn-primary btn-lg see-btn">See the work<Icon name="arrow" /></span>
         </span>
-      </button>
+      </Cover>
     </div>
 
-    <!-- Cover flow -->
-    <div class="flow" data-view="flow" hidden>
+    <!-- Cover flow (left out when there are no finished cards to show) -->
+    {cards.length > 0 && <div class="flow" data-view="flow" hidden>
       <button class="btn btn-outline btn-sm back-btn" type="button" data-close><Icon name="arrow-left" />Back</button>
 
       <div class="stage" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Project results. Use the left and right arrow keys to browse." data-stage>
@@ -122,6 +141,7 @@ const comments = [
           <div class="cap" data-cap={c.i} aria-hidden="true">
             <p class="cap-stat"><span class="lime">{c.stat}</span> <span class="cap-unit">{c.unit}</span></p>
             <p class="cap-line">{c.line}</p>
+            {c.href && <a class="cap-link" href={c.href}>Read the case study<Icon name="arrow" size={18} /></a>}
           </div>
         ))}
       </div>
@@ -133,7 +153,7 @@ const comments = [
         </div>
         <button class="nav-arrow next" type="button" data-next aria-label="Next project"><Icon name="chevron-right" size={22} /></button>
       </div>
-    </div>
+    </div>}
   </div>
 </section>
 
@@ -219,7 +239,10 @@ const comments = [
 
   .captions { position: relative; width: 100%; max-width: 720px; height: 150px; margin-top: 8px; }
   .cap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; opacity: 0; transform: translateY(14px); transition: opacity .45s ease, transform .45s ease; }
+  .cap:not([data-on]) { visibility: hidden; }
   .cap[data-on] { opacity: 1; transform: none; }
+  .cap-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--accent); font-weight: 700; text-decoration: none; }
+  .cap-link:hover { text-decoration: underline; text-underline-offset: 4px; }
   .cap-stat { font-size: clamp(2.75rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
   .cap-unit { font-size: .5em; letter-spacing: -0.02em; }
   .cap-line { font-size: clamp(1.125rem, 2.2vw, 1.5rem); color: var(--text-2); font-weight: 500; }

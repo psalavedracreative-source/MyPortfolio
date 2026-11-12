@@ -1,7 +1,10 @@
 ---
 import Icon from './Icon.astro';
-import { faq, site, bookingUrl, dmUrl, email, formEndpoint } from '../lib/content';
+import { faq as faqRaw, site, bookingUrl, dmUrl, email, formEndpoint, tidy } from '../lib/content';
 // Everything the chat needs, read once from content/assistant-faq.json + site.json.
+// With drafts hidden (site.json → show_drafts: false), unfilled [PLACEHOLDERS] are removed from the answers.
+const { _note, ...faqData } = faqRaw;
+const faq = { ...faqData, fallback: { ...faqRaw.fallback, answer: tidy(faqRaw.fallback.answer) }, intents: faqRaw.intents.map((i) => ({ ...i, answer: tidy(i.answer) })) };
 const data = { faq, bookingUrl, dmUrl, email, formEndpoint, owner: site.owner.split(' ')[0] };
 ---
 <div class="assistant" data-assistant>

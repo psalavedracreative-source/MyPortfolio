@@ -135,6 +135,39 @@ collections:
         file: content/site.json
         format: json
         fields:
+          - { name: show_drafts, label: "Show drafts (unfinished [PLACEHOLDER] content). Turn off when the site goes live.", widget: boolean, default: true }
+          - name: intro_video
+            label: Home intro video
+            widget: object
+            fields:
+              - { name: kicker, label: Small label, widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: accent, label: Title (lime part), widget: string }
+              - { name: text, label: Text, widget: text }
+              - { name: video, label: "Video (MP4, 30–60 s)", widget: file, required: false, media_folder: "/assets/intro", public_folder: "assets/intro" }
+              - { name: poster, label: "Cover image (optional)", widget: image, required: false, media_folder: "/assets/intro", public_folder: "assets/intro" }
+              - { name: length, label: "Length (e.g. 0:45)", widget: string, required: false }
+              - { name: ratio, label: Shape, widget: select, options: ["9:16", "16:9", "1:1", "4:5"], default: "9:16" }
+          - name: audit
+            label: Free profile audit (Home)
+            widget: object
+            fields:
+              - { name: kicker, label: Small label, widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: accent, label: Title (lime part), widget: string }
+              - { name: text, label: Text, widget: text }
+              - { name: points, label: Points, widget: list, field: { name: point, label: Point, widget: string } }
+              - { name: button, label: Button text, widget: string }
+          - name: platform_badges
+            label: Platform badges (under testimonials)
+            label_singular: Badge
+            widget: list
+            summary: "{{fields.platform}} · {{fields.badge}}"
+            fields:
+              - { name: platform, label: "Platform (e.g. OnlineJobs.ph)", widget: string }
+              - { name: badge, label: "Badge (e.g. Top Rated)", widget: string }
+              - { name: detail, label: "Detail (e.g. 25 jobs completed)", widget: string }
+              - { name: url, label: "Link to your profile there (optional)", widget: string, required: false }
           - { name: brand, label: Brand name, widget: string }
           - { name: owner, label: Owner, widget: string }
           - { name: role, label: Role, widget: string }
@@ -198,7 +231,95 @@ collections:
               - { name: url, label: "Link to the review or your profile there (https://…)", widget: string, required: false }
               - { name: featured, label: "Featured (shown large, first)", widget: boolean, default: false, required: false }
               - { name: show, label: "Show on the site", widget: boolean, default: true, required: false }
+              - { name: video, label: "Video testimonial (MP4, optional)", widget: file, required: false, media_folder: "/assets/testimonials", public_folder: "assets/testimonials" }
+              - { name: poster, label: "Video cover image (optional)", widget: image, required: false, media_folder: "/assets/testimonials", public_folder: "assets/testimonials" }
           - { name: form_endpoint, label: "Form endpoint (Formspree / Web3Forms URL)", widget: string }
+
+  # ---------------------------------------------------------------- CASE STUDIES & PRICING
+  - name: results
+    label: Case studies & pricing
+    files:
+      - name: case_studies
+        label: Case studies
+        file: content/case-studies.json
+        format: json
+        fields:
+          - { name: _how_to_add, label: Note, widget: hidden }
+          - { name: title, label: Section title, widget: string }
+          - { name: intro, label: Section intro, widget: string }
+          - name: items
+            label: Case studies
+            label_singular: Case study
+            widget: list
+            summary: "{{fields.brand}} · {{fields.headline}}"
+            fields:
+              - { name: slug, label: "Page address (/work/…, lowercase, no spaces)", widget: string }
+              - { name: brand, label: Brand, widget: string }
+              - { name: logo, label: "Logo (optional; reused from client logos if the name matches)", widget: image, required: false, media_folder: "/assets/case-studies", public_folder: "assets/case-studies" }
+              - { name: platform, label: "Platform (e.g. Facebook page)", widget: string }
+              - { name: niche, label: Niche, widget: string }
+              - { name: headline, label: "Headline (e.g. Roam Tail: 1.2K → 8K followers in 3 months)", widget: string }
+              - { name: summary, label: One-sentence summary, widget: text }
+              - { name: period, label: "Period (e.g. Jan – Mar 2026)", widget: string }
+              - name: results
+                label: Results
+                widget: list
+                summary: "{{fields.label}}: {{fields.before}} → {{fields.after}}"
+                fields:
+                  - { name: label, label: "Metric (e.g. Followers)", widget: string }
+                  - { name: before, label: Before, widget: string }
+                  - { name: after, label: After, widget: string }
+              - { name: challenge, label: Where it started, widget: text }
+              - { name: approach, label: What I did, widget: list, field: { name: step, label: Step, widget: string } }
+              - name: proof
+                label: Analytics screenshots
+                widget: list
+                required: false
+                fields:
+                  - { name: image, label: Screenshot, widget: image, media_folder: "/assets/case-studies", public_folder: "assets/case-studies" }
+                  - { name: caption, label: "Caption (tool · metric · dates)", widget: string }
+              - name: before_after
+                label: Before & after
+                widget: object
+                required: false
+                fields:
+                  - { name: before, label: Before, widget: image, required: false, media_folder: "/assets/case-studies", public_folder: "assets/case-studies" }
+                  - { name: after, label: After, widget: image, required: false, media_folder: "/assets/case-studies", public_folder: "assets/case-studies" }
+                  - { name: caption, label: Caption, widget: string, required: false }
+              - { name: samples, label: Content samples, widget: list, required: false, field: { name: sample, label: Image, widget: image, media_folder: "/assets/case-studies", public_folder: "assets/case-studies" } }
+              - name: quote
+                label: Client quote
+                widget: object
+                required: false
+                fields:
+                  - { name: text, label: Quote, widget: text, required: false }
+                  - { name: name, label: Name, widget: string, required: false }
+                  - { name: role, label: "Role, Brand", widget: string, required: false }
+              - { name: featured, label: "Also show on the Home page proof section", widget: boolean, default: false, required: false }
+      - name: pricing
+        label: Packages & pricing
+        file: content/pricing.json
+        format: json
+        fields:
+          - { name: kicker, label: Small label, widget: string }
+          - { name: title, label: Title, widget: string }
+          - { name: accent, label: Title (lime part), widget: string }
+          - { name: intro, label: Intro, widget: text }
+          - { name: note, label: Note under the packages, widget: string }
+          - name: packages
+            label: Packages
+            label_singular: Package
+            widget: list
+            summary: "{{fields.name}} · from {{fields.price}}"
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: price, label: "Starting price (e.g. ₱8,000)", widget: string }
+              - { name: period, label: "Period (e.g. / month)", widget: string }
+              - { name: for, label: Who it's for, widget: string }
+              - { name: includes, label: What's included, widget: list, field: { name: item, label: Item, widget: string } }
+              - { name: featured, label: Highlight this package, widget: boolean, default: false, required: false }
+              - { name: badge, label: "Badge on the highlighted package (optional)", widget: string, required: false }
+          - { name: custom, label: Line under everything, widget: string }
 
   # ---------------------------------------------------------------- ASSISTANT
   - name: assistant
@@ -231,3 +352,5 @@ collections:
               - { name: answer, label: Answer, widget: text }
               - { name: chips, label: Quick replies, widget: list, required: false, field: { name: chip, label: Chip, widget: string } }
               - { name: action, label: Action, widget: select, required: false, options: [open_booking, go_work, show_lead_form] }
+              - { name: faq, label: "Show in the Home FAQ as this question (optional)", widget: string, required: false }
+              - { name: faq_order, label: "FAQ order (1 = first)", widget: number, value_type: int, required: false }

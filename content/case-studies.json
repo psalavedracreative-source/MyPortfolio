@@ -1,0 +1,187 @@
+{
+  "_how_to_add": "One object per case study. slug becomes the page address (/work/<slug>): lowercase, no spaces. Everything in [BRACKETS] is a placeholder: replace it, or delete optional parts (proof, before_after, samples, quote). Images go in assets/case-studies/<slug>/. If brand matches a name in site.json client_logos, that logo links to the case study and its logo is reused. featured=true shows it on the Home page proof section.",
+  "title": "Case studies",
+  "intro": "Real pages, real numbers, with the analytics to prove it.",
+  "items": [
+    {
+      "slug": "case-study-1",
+      "brand": "[Brand name 1]",
+      "logo": "",
+      "platform": "[Platform, e.g. Facebook page]",
+      "niche": "[Niche]",
+      "headline": "[Brand]: [1.2K] → [8K] followers in [3 months]",
+      "summary": "[One sentence: where the page was, and what changed.]",
+      "period": "[Month YYYY – Month YYYY]",
+      "results": [
+        {
+          "label": "Followers",
+          "before": "[X]",
+          "after": "[X]"
+        },
+        {
+          "label": "Monthly reach",
+          "before": "[X]",
+          "after": "[X]"
+        },
+        {
+          "label": "Engagement rate",
+          "before": "[X]%",
+          "after": "[X]%"
+        }
+      ],
+      "challenge": "[Where the page was when we started, and what wasn't working. 2–3 sentences.]",
+      "approach": [
+        "[What I did, step 1, e.g. a content plan built on 3 pillars]",
+        "[Step 2, e.g. 3 reels a week with strong first-3-second hooks]",
+        "[Step 3, e.g. a consistent posting schedule and replies within the hour]",
+        "[Step 4, optional]"
+      ],
+      "proof": [
+        {
+          "image": "[assets/case-studies/case-study-1/insights-1.png]",
+          "caption": "[Meta Business Suite · Followers · Jan–Mar 2026]"
+        },
+        {
+          "image": "[assets/case-studies/case-study-1/insights-2.png]",
+          "caption": "[TikTok analytics · Views · Jan–Mar 2026]"
+        }
+      ],
+      "before_after": {
+        "before": "[assets/case-studies/case-study-1/before.png]",
+        "after": "[assets/case-studies/case-study-1/after.png]",
+        "caption": "[Profile / feed before and after]"
+      },
+      "samples": [
+        "[assets/case-studies/case-study-1/post-1.png]",
+        "[assets/case-studies/case-study-1/post-2.png]",
+        "[assets/case-studies/case-study-1/post-3.png]"
+      ],
+      "quote": {
+        "text": "[What the client said about the results]",
+        "name": "[Client name]",
+        "role": "[Role, Brand]"
+      },
+      "featured": true
+    },
+    {
+      "slug": "case-study-2",
+      "brand": "[Brand name 2]",
+      "logo": "",
+      "platform": "[Platform, e.g. Facebook page]",
+      "niche": "[Niche]",
+      "headline": "[Brand]: [1.2K] → [8K] followers in [3 months]",
+      "summary": "[One sentence: where the page was, and what changed.]",
+      "period": "[Month YYYY – Month YYYY]",
+      "results": [
+        {
+          "label": "Followers",
+          "before": "[X]",
+          "after": "[X]"
+        },
+        {
+          "label": "Monthly reach",
+          "before": "[X]",
+          "after": "[X]"
+        },
+        {
+          "label": "Engagement rate",
+          "before": "[X]%",
+          "after": "[X]%"
+        }
+      ],
+      "challenge": "[Where the page was when we started, and what wasn't working. 2–3 sentences.]",
+      "approach": [
+        "[What I did, step 1, e.g. a content plan built on 3 pillars]",
+        "[Step 2, e.g. 3 reels a week with strong first-3-second hooks]",
+        "[Step 3, e.g. a consistent posting schedule and replies within the hour]",
+        "[Step 4, optional]"
+      ],
+      "proof": [
+        {
+          "image": "[assets/case-studies/case-study-2/insights-1.png]",
+          "caption": "[Meta Business Suite · Followers · Jan–Mar 2026]"
+        },
+        {
+          "image": "[assets/case-studies/case-study-2/insights-2.png]",
+          "caption": "[TikTok analytics · Views · Jan–Mar 2026]"
+        }
+      ],
+      "before_after": {
+        "before": "[assets/case-studies/case-study-2/before.png]",
+        "after": "[assets/case-studies/case-study-2/after.png]",
+        "caption": "[Profile / feed before and after]"
+      },
+      "samples": [
+        "[assets/case-studies/case-study-2/post-1.png]",
+        "[assets/case-studies/case-study-2/post-2.png]",
+        "[assets/case-studies/case-study-2/post-3.png]"
+      ],
+      "quote": {
+        "text": "[What the client said about the results]",
+        "name": "[Client name]",
+        "role": "[Role, Brand]"
+      },
+      "featured": true
+    },
+    {
+      "slug": "case-study-3",
+      "brand": "[Brand name 3]",
+      "logo": "",
+      "platform": "[Platform, e.g. Facebook page]",
+      "niche": "[Niche]",
+      "headline": "[Brand]: [1.2K] → [8K] followers in [3 months]",
+      "summary": "[One sentence: where the page was, and what changed.]",
+      "period": "[Month YYYY – Month YYYY]",
+      "results": [
+        {
+          "label": "Followers",
+          "before": "[X]",
+          "after": "[X]"
+        },
+        {
+          "label": "Monthly reach",
+          "before": "[X]",
+          "after": "[X]"
+        },
+        {
+          "label": "Engagement rate",
+          "before": "[X]%",
+          "after": "[X]%"
+        }
+      ],
+      "challenge": "[Where the page was when we started, and what wasn't working. 2–3 sentences.]",
+      "approach": [
+        "[What I did, step 1, e.g. a content plan built on 3 pillars]",
+        "[Step 2, e.g. 3 reels a week with strong first-3-second hooks]",
+        "[Step 3, e.g. a consistent posting schedule and replies within the hour]",
+        "[Step 4, optional]"
+      ],
+      "proof": [
+        {
+          "image": "[assets/case-studies/case-study-3/insights-1.png]",
+          "caption": "[Meta Business Suite · Followers · Jan–Mar 2026]"
+        },
+        {
+          "image": "[assets/case-studies/case-study-3/insights-2.png]",
+          "caption": "[TikTok analytics · Views · Jan–Mar 2026]"
+        }
+      ],
+      "before_after": {
+        "before": "[assets/case-studies/case-study-3/before.png]",
+        "after": "[assets/case-studies/case-study-3/after.png]",
+        "caption": "[Profile / feed before and after]"
+      },
+      "samples": [
+        "[assets/case-studies/case-study-3/post-1.png]",
+        "[assets/case-studies/case-study-3/post-2.png]",
+        "[assets/case-studies/case-study-3/post-3.png]"
+      ],
+      "quote": {
+        "text": "[What the client said about the results]",
+        "name": "[Client name]",
+        "role": "[Role, Brand]"
+      },
+      "featured": false
+    }
+  ]
+}

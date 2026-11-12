@@ -1,0 +1,44 @@
+---
+/**
+ * One image (or video) from the content JSON, or a labelled empty slot while the file isn't there yet.
+ * With `group`, a click opens it in the full-screen viewer (Lightbox component must be on the page).
+ */
+import { Picture, getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import { imageFor, videoFor } from '../lib/content';
+
+interface Props { src?: string; alt: string; label?: string; ratio?: string; sizes?: string; group?: string; caption?: string; fit?: 'cover' | 'contain' }
+const { src = '', alt, label = 'Image', ratio = '4 / 5', sizes = '(max-width: 760px) 100vw, 560px', group, caption, fit = 'cover' } = Astro.props;
+
+const img = imageFor(src);
+const vid = img ? undefined : videoFor(src);
+const full = img && group ? (await getImage({ src: img, width: 1800, format: 'webp', quality: 82 })).src : undefined;
+const pic = { widths: [400, 700, 1000, 1400], sizes, formats: ['avif', 'webp'] as ('avif' | 'webp')[], fallbackFormat: 'jpg' as const, loading: 'lazy' as const, decoding: 'async' as const };
+---
+<div class="shot" style={`aspect-ratio:${ratio}`} data-fit={fit}>
+  {img && group && (
+    <button class="zoom" type="button" data-lightbox-item={group} data-full={full} data-alt={alt} data-caption={caption ?? alt} aria-label={`View larger: ${alt}`}>
+      <Picture src={img} alt="" {...pic} />
+    </button>
+  )}
+  {img && !group && <Picture src={img} alt={alt} {...pic} />}
+  {vid && <video src={vid} controls playsinline preload="metadata" aria-label={alt}></video>}
+  {!img && !vid && (
+    <div class="slot">
+      <Icon name="image" />
+      <span>{label}</span>
+      {src && <span class="slot-path">{src}</span>}
+    </div>
+  )}
+</div>
+
+<style>
+  .shot { position: relative; width: 100%; border-radius: var(--r-sm); overflow: hidden; background: var(--bg); }
+  .shot :global(picture), .shot :global(img), .shot video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .shot[data-fit='contain'] :global(img) { object-fit: contain; }
+  .zoom { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+  .zoom :global(img) { transition: transform .5s ease; }
+  .zoom:hover :global(img) { transform: scale(1.03); }
+  .slot { position: absolute; inset: 0; }
+  .slot-path { font-size: .75rem; font-weight: 500; word-break: break-all; opacity: .85; }
+</style>

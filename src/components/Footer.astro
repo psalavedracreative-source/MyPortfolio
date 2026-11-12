@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { site, email } from '../lib/content';
+import { site, email, showDrafts } from '../lib/content';
 const year = new Date().getFullYear();
 ---
 <footer class="footer">
@@ -12,7 +12,7 @@ const year = new Date().getFullYear();
       <li>
         {email
           ? <a href={`mailto:${email}`}><Icon name="mail" />{email}</a>
-          : <span class="placeholder"><Icon name="mail" />{site.links.email}</span>}
+          : showDrafts && <span class="placeholder"><Icon name="mail" />{site.links.email}</span>}
       </li>
     </ul>
     <p class="copy">© {year} {site.owner}. {site.location}.</p>

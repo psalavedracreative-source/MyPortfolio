@@ -5,23 +5,26 @@ import Documentary from '../components/Documentary.astro';
 import Lightbox from '../components/Lightbox.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
-import { about, site, imageFor } from '../lib/content';
+import { about, site, imageFor, keep, tidy } from '../lib/content';
 
 const heroImg = imageFor(about.hero_photo);
 const [hiBefore] = about.headline.split('Patrick');
-const chapters = about.documentary.map((c) => ({ ...c, img: imageFor(c.photo) }));
+// With drafts hidden: chapters keep only their finished text; unfinished certificates and gallery photos are left out.
+const chapters = about.documentary
+  .map((c) => ({ ...c, img: imageFor(c.photo), year: tidy(c.year), text: tidy(c.text).replace(/^[\s,.;:]+$/, '') }))
+  .filter((c) => keep(c.title));
 
 const full = async (src: ReturnType<typeof imageFor>) =>
   src ? (await getImage({ src, width: 1600, format: 'webp', quality: 82 })).src : undefined;
-const certs = await Promise.all(about.certificates.map(async (c) => {
+const certs = await Promise.all(about.certificates.filter((c) => keep(c)).map(async (c) => {
   const img = imageFor(c.photo);
   return { ...c, img, full: await full(img) };
 }));
-const gallery = await Promise.all(about.gallery.map(async (g) => {
+const gallery = await Promise.all(about.gallery.filter((g) => keep(g)).map(async (g) => {
   const img = imageFor(g.photo);
   return { ...g, img, full: await full(img) };
 }));
-const thumb = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 380px', formats: ['avif', 'webp'] as const, fallbackFormat: 'jpg' as const };
+const thumb = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 380px', formats: ['avif', 'webp'] as ('avif' | 'webp')[], fallbackFormat: 'jpg' as const };
 ---
 <Base
   page="about"
@@ -42,7 +45,7 @@ const thumb = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 380px
       </h1>
       <p class="lead">{about.bio}</p>
       <ul class="stats">
-        {about.stats.map((s) => (
+        {about.stats.filter((s) => keep(s)).map((s) => (
           <li class="card stat"><p class="stat-v">{s.value}</p><p class="stat-l">{s.label}</p></li>
         ))}
       </ul>
@@ -63,9 +66,9 @@ const thumb = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 380px
               : <div class="slot"><Icon name="image" />{c.photo}</div>}
           </div>
           <div class="chapter-copy">
-            <p class="ch-label">{c.chapter} · {c.year}</p>
+            <p class="ch-label">{c.chapter}{c.year && ` · ${c.year}`}</p>
             <h3 class="ch-title">{c.title}</h3>
-            <p class="ch-text">{c.text}</p>
+            {c.text && <p class="ch-text">{c.text}</p>}
           </div>
         </li>
       ))}
@@ -73,7 +76,7 @@ const thumb = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 380px
   </section>
 
   <!-- Certificates -->
-  <section class="container section" aria-labelledby="certs-title">
+  {certs.length > 0 && <section class="container section" aria-labelledby="certs-title">
     <h2 class="h2" id="certs-title">Certificates</h2>
     <ul class="certs">
       {certs.map((c) => (
@@ -90,10 +93,10 @@ const thumb = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 380px
         </li>
       ))}
     </ul>
-  </section>
+  </section>}
 
   <!-- Gallery -->
-  <section class="container section" aria-labelledby="bts-title">
+  {gallery.length > 0 && <section class="container section" aria-labelledby="bts-title">
     <h2 class="h2" id="bts-title">Behind the scenes</h2>
     <ul class="gallery">
       {gallery.map((g) => (
@@ -107,7 +110,7 @@ const thumb = { widths: [320, 560, 800], sizes: '(max-width: 600px) 100vw, 380px
         </li>
       ))}
     </ul>
-  </section>
+  </section>}
 
   <CtaBand title="Let's write your brand's next" accent="chapter." />
   <Lightbox />
