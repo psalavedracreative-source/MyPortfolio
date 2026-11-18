@@ -280,5 +280,46 @@
         "example": "AI-created product photos, synthetic video avatars, or AI-written ad copy."
       }
     ]
+  },
+  "proof_reactions": {
+    "_how_to_add": "The comments that float up on the Home page 'LIVE · Client reactions' cover. Use real comments from real people: copy the text exactly, put the commenter's profile photo in assets/reactions/ and set avatar to its path (square photos work best; it's shown as a small circle). name is optional and only used for the initial when there's no photo. sample: true marks the placeholder comments; they disappear when show_drafts is false. Only use comments and photos you have permission to show.",
+    "comments": [
+      {
+        "text": "Amazing work!",
+        "name": "A",
+        "avatar": "",
+        "sample": true
+      },
+      {
+        "text": "Amazing content!",
+        "name": "J",
+        "avatar": "",
+        "sample": true
+      },
+      {
+        "text": "This is so good",
+        "name": "M",
+        "avatar": "",
+        "sample": true
+      },
+      {
+        "text": "Need this for my brand",
+        "name": "R",
+        "avatar": "",
+        "sample": true
+      },
+      {
+        "text": "Saved this!",
+        "name": "K",
+        "avatar": "",
+        "sample": true
+      },
+      {
+        "text": "That edit though",
+        "name": "D",
+        "avatar": "",
+        "sample": true
+      }
+    ]
   }
 }
