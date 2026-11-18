@@ -62,7 +62,10 @@ const flowBubbles = ['8%', '22%', '38%', '52%', '66%', '80%', '30%'].map((left, 
 // Floating comments: work.json → proof_reactions. A real profile photo (avatar) replaces the initial.
 // Placeholder comments (sample: true) are hidden once show_drafts is false.
 type Reaction = { text: string; name?: string; avatar?: string; sample?: boolean };
-const LEFTS = ['6%', '58%', '30%', '64%', '10%', '44%', '20%', '52%'];
+const LEFTS = ['6%', '58%', '30%', '64%', '10%', '44%', '22%'];
+// At most SLOTS bubbles float at once; with more comments, each bubble moves on to the next comment
+// every time it finishes floating up (see the script below), so every comment gets its turn.
+const SLOTS = 7;
 const SWATCH = ['#C8F54A', '#FFB86B', '#8EC5FF', '#FF9AB0', '#C8F54A', '#B7A6FF'];
 const reactions = ((work as { proof_reactions?: { comments: Reaction[] } }).proof_reactions?.comments ?? [])
   .filter((c) => c.text?.trim() && (showDrafts || !c.sample));
@@ -73,8 +76,8 @@ const comments = reactions.map((c, i) => ({
   bg: SWATCH[i % SWATCH.length],
   left: LEFTS[i % LEFTS.length],
   // spread the loop so 6 comments keep today's rhythm and more comments don't bunch up
-  dur: (9 + (i % 3) + Math.max(0, reactions.length - 6) * 0.6).toFixed(1),
-  delay: (-(i * ((9 + Math.max(0, reactions.length - 6) * 0.6) / Math.max(reactions.length, 1)) * 1.1)).toFixed(1),
+  dur: (9 + (i % 3)).toFixed(1),
+  delay: (-(i * 1.5)).toFixed(1),
 }));
 ---
 <section class="proof section" id="proof" aria-labelledby="proof-title" data-proof={cards.length ? '' : undefined}>
@@ -96,7 +99,7 @@ const comments = reactions.map((c, i) => ({
               <svg viewBox="0 0 24 24"><path d={b.d} /></svg>
             </span>
           ))}
-          {comments.map((c) => (
+          {comments.slice(0, SLOTS).map((c) => (
             <span class="cmt" style={`left:${c.left};--dur:${c.dur}s;--delay:${c.delay}s`}>
               {c.photo
                 ? <Image src={c.photo} alt="" width={64} height={64} format="webp" class="cmt-photo" />
@@ -104,6 +107,18 @@ const comments = reactions.map((c, i) => ({
               {c.text}
             </span>
           ))}
+          {comments.length > SLOTS && (
+            <span hidden data-cmt-pool>
+              {comments.map((c) => (
+                <span>
+                  {c.photo
+                    ? <Image src={c.photo} alt="" width={64} height={64} format="webp" class="cmt-photo" loading="eager" />
+                    : <span class="cmt-av" style={`background:${c.bg}`}>{c.ini}</span>}
+                  {c.text}
+                </span>
+              ))}
+            </span>
+          )}
         </span>
         <span class="cover-body">
           <span class="cover-title">Content people<br />can't <span class="lime">scroll past.</span></span>
@@ -283,6 +298,16 @@ const comments = reactions.map((c, i) => ({
 </style>
 
 <script>
+  // Rotate comments through the floating bubbles: each time a bubble finishes floating up, it takes the next comment.
+  document.querySelectorAll<HTMLElement>('[data-cmt-pool]').forEach((pool) => {
+    const items = [...pool.children];
+    const slots = [...(pool.parentElement?.querySelectorAll<HTMLElement>('.cmt') ?? [])];
+    let next = slots.length;
+    slots.forEach((slot) => slot.addEventListener('animationiteration', () => {
+      slot.replaceChildren(...[...items[next % items.length].cloneNode(true).childNodes]);
+      next++;
+    }));
+  });
   import { initProof } from '../scripts/proof';
   document.querySelectorAll<HTMLElement>('[data-proof]').forEach(initProof);
 </script>

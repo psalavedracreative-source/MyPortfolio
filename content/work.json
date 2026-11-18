@@ -282,12 +282,18 @@
     ]
   },
   "proof_reactions": {
-    "_how_to_add": "The comments that float up on the Home page 'LIVE · Client reactions' cover. Use real comments from real people: copy the text exactly, put the commenter's profile photo in assets/reactions/ and set avatar to its path (square photos work best; it's shown as a small circle). name is optional and only used for the initial when there's no photo. sample: true marks the placeholder comments; they disappear when show_drafts is false. Only use comments and photos you have permission to show.",
+    "_how_to_add": "The comments that float up on the Home page 'LIVE · Client reactions' cover. Use real comments from real people: copy the text exactly, put the commenter's profile photo in assets/reactions/ and set avatar to its path (square photos work best; it's shown as a small circle). name is optional and only used for the initial when there's no photo. Up to 7 float at once; with more, each bubble switches to the next comment every time it floats up, so all of them rotate through. sample: true marks the placeholder comments; they disappear when show_drafts is false. Only use comments and photos you have permission to show.",
     "comments": [
       {
         "text": "That is gorgeous!",
         "name": "",
         "avatar": "assets/reactions/reaction-1.png",
+        "sample": false
+      },
+      {
+        "text": "Awesome",
+        "name": "",
+        "avatar": "assets/reactions/reaction-10.png",
         "sample": false
       },
       {
@@ -303,6 +309,12 @@
         "sample": false
       },
       {
+        "text": "Beautiful.",
+        "name": "",
+        "avatar": "assets/reactions/reaction-11.png",
+        "sample": false
+      },
+      {
         "text": "Beautiful!",
         "name": "",
         "avatar": "assets/reactions/reaction-6.png",
@@ -315,6 +327,12 @@
         "sample": false
       },
       {
+        "text": "❤️Awesome",
+        "name": "",
+        "avatar": "assets/reactions/reaction-12.png",
+        "sample": false
+      },
+      {
         "text": "Beauitful",
         "name": "",
         "avatar": "assets/reactions/reaction-2.png",
@@ -324,6 +342,12 @@
         "text": "Absolutely gorgeous!",
         "name": "",
         "avatar": "assets/reactions/reaction-4.png",
+        "sample": false
+      },
+      {
+        "text": "Beautiful",
+        "name": "",
+        "avatar": "assets/reactions/reaction-13.png",
         "sample": false
       },
       {
